@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="e9f004ed-5d81-484d-84d9-1f2dd4b05fb2" name="Default" comment="" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
+    <list default="true" id="e9f004ed-5d81-484d-84d9-1f2dd4b05fb2" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/ReLU函数.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/Sigmoid Function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/Softmax函数.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/Step Function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/tanh函数.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test1.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test10.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test11.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test12.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test13.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test2.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test3.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test4.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test5.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test6.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test7.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test8.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/10_29/test9.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/Step Function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pytorch_learn/AIGC/阶跃函数与Sigmoid函数对比.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/little_project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/little_project.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,6 +49,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -40,11 +69,15 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-10" />
     <option name="width" value="1558" />
     <option name="height" value="1836" />
   </component>
+  <component name="ProjectId" id="2o6o6zEhDspes50SvJDkaKSG7no" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -69,32 +102,56 @@
       </pane>
     </panes>
   </component>
-  <component name="PropertiesComponent">
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.ReLU函数.executor": "Run",
+    "Python.Sigmoid Function.executor": "Run",
+    "Python.Softmax函数.executor": "Run",
+    "Python.tanh函数.executor": "Run",
+    "Python.test1.executor": "Run",
+    "Python.test10.executor": "Run",
+    "Python.test11.executor": "Run",
+    "Python.test12.executor": "Run",
+    "Python.test13.executor": "Run",
+    "Python.test2.executor": "Run",
+    "Python.test3.executor": "Run",
+    "Python.test4.executor": "Run",
+    "Python.test5.executor": "Run",
+    "Python.test6.executor": "Run",
+    "Python.test7.executor": "Run",
+    "Python.test9.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/web_project",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Project_python_learn\little_project\pytorch_learn\AIGC" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Project_python_learn\little_project\pytorch_learn\AIGC" />
+      <recent name="D:\Project_python_learn\little_project\pytorch_learn\AIGC\深度学习 入门" />
+      <recent name="D:\Project_python_learn\little_project\pytorch_learn\AIGC\深度学习 入门\十月二十九" />
       <recent name="D:\Project_python_learn\little_project\数字雨" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="Python.数字雨 (1)">
     <configuration name="数字雨 (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="little_project" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -111,9 +168,13 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="数字雨" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="little_project" />
+      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -130,6 +191,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="翻译" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="little_project" />
@@ -151,18 +215,25 @@
       <option name="MODULE_MODE" value="false" />
     </configuration>
     <list>
-      <item itemvalue="Python.数字雨" />
-      <item itemvalue="Python.翻译" />
       <item itemvalue="Python.数字雨 (1)" />
+      <item itemvalue="Python.数字雨" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.数字雨 (1)" />
-        <item itemvalue="Python.翻译" />
         <item itemvalue="Python.数字雨" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23339.19" />
+        <option value="bundled-python-sdk-0029f7779945-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23339.19" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -173,6 +244,14 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1726293214178</updated>
+      <workItem from="1730199215539" duration="7048000" />
+      <workItem from="1730424606319" duration="693000" />
+      <workItem from="1730514045743" duration="107000" />
+      <workItem from="1730551606803" duration="1573000" />
+      <workItem from="1730804284021" duration="1461000" />
+      <workItem from="1730805772550" duration="1036000" />
+      <workItem from="1730812959225" duration="225000" />
+      <workItem from="1731032483221" duration="137000" />
     </task>
     <servers />
   </component>
@@ -203,10 +282,25 @@
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/little_project$test11.coverage" NAME="test11 覆盖结果" MODIFIED="1730207863025" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$test3.coverage" NAME="test3 覆盖结果" MODIFIED="1730201287664" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC" />
+    <SUITE FILE_PATH="coverage/little_project$test9.coverage" NAME="test9 覆盖结果" MODIFIED="1730205364784" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$Softmax.coverage" NAME="Softmax函数 覆盖结果" MODIFIED="1730207751404" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$test6.coverage" NAME="test6 覆盖结果" MODIFIED="1730201648497" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC" />
+    <SUITE FILE_PATH="coverage/little_project$ReLU.coverage" NAME="ReLU函数 覆盖结果" MODIFIED="1730206180402" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$test2.coverage" NAME="test2 覆盖结果" MODIFIED="1730201054798" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/cache" />
+    <SUITE FILE_PATH="coverage/little_project$tanh.coverage" NAME="tanh函数 覆盖结果" MODIFIED="1730205997691" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$test10.coverage" NAME="test10 覆盖结果" MODIFIED="1730206641489" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$test5.coverage" NAME="test5 覆盖结果" MODIFIED="1730201585562" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC" />
+    <SUITE FILE_PATH="coverage/little_project$test13.coverage" NAME="test13 覆盖结果" MODIFIED="1730208831596" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
+    <SUITE FILE_PATH="coverage/little_project$test1.coverage" NAME="test1 覆盖结果" MODIFIED="1730200891703" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC" />
+    <SUITE FILE_PATH="coverage/little_project$Sigmoid_Function.coverage" NAME="Sigmoid Function 覆盖结果" MODIFIED="1730812973095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC" />
+    <SUITE FILE_PATH="coverage/little_project$test4.coverage" NAME="test4 覆盖结果" MODIFIED="1730201386081" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC" />
+    <SUITE FILE_PATH="coverage/little_project$test7.coverage" NAME="test7 覆盖结果" MODIFIED="1730201842886" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门" />
+    <SUITE FILE_PATH="coverage/little_project$test12.coverage" NAME="test12 覆盖结果" MODIFIED="1730207980803" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pytorch_learn/AIGC/深度学习 入门/十月二十九" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/数字雨/数字雨.py">
