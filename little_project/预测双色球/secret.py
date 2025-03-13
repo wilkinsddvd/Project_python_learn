@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import random
-for i in range (1,100):
+for i in range (1,200):
     a = random.randint(1, 33)
     b = random.randint(1, 33)
     c = random.randint(1, 33)

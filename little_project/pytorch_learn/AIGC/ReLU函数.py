@@ -9,4 +9,5 @@ y = relu(x)
 
 plt.plot(x, y)
 plt.ylim(-0.1, 5.5)
+plt.title('ReLU Function')
 plt.show()
