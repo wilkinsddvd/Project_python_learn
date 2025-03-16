@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结果页</title>
+</head>
+<body>
+    <diV class="container">
+        <h2>当前问题：{{question.desc}}</h2>
+        <ul>
+            {% for c in question.choices_set.all %}
+            <li>{{forloop.counter}}{{c.desc}}---{{c.votes}}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'polls:index' %}">回到首页</a>
+    </diV>
+
+</body>
+</html>

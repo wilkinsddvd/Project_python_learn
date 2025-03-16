@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<link rel="pingback" href="https://marcobonzanini.com/xmlrpc.php">
+	<!--[if lt IE 9]>
+	<script src="https://s2.wp.com/wp-content/themes/pub/twentyfifteen/js/html5.js?ver=3.7.0"></script>
+	<![endif]-->
+	<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Big Data &#8211; Marco Bonzanini</title>
+<meta name='robots' content='max-image-preview:large' />
+<meta name="google-site-verification" content="VXIZ3mNLDuuyimd-sOy-MqbBomxKbKIIFwM8Ckr8iCg" />
+
+<!-- Async WordPress.com Remote Login -->
+<script id="wpcom_remote_login_js">
+var wpcom_remote_login_extra_auth = '';
+function wpcom_remote_login_remove_dom_node_id( element_id ) {
+	var dom_node = document.getElementById( element_id );
+	if ( dom_node ) { dom_node.parentNode.removeChild( dom_node ); }
+}
+function wpcom_remote_login_remove_dom_node_classes( class_name ) {
+	var dom_nodes = document.querySelectorAll( '.' + class_name );
+	for ( var i = 0; i < dom_nodes.length; i++ ) {
+		dom_nodes[ i ].parentNode.removeChild( dom_nodes[ i ] );
+	}
+}
+function wpcom_remote_login_final_cleanup() {
+	wpcom_remote_login_remove_dom_node_classes( "wpcom_remote_login_msg" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_validate" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_js" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_iframe" );
+	wpcom_remote_login_remove_dom_node_id( "wpcom_request_access_styles" );
+}
+
+// Watch for messages back from the remote login
+window.addEventListener( "message", function( e ) {
+	if ( e.origin === "https://r-login.wordpress.com" ) {
+		var data = {};
+		try {
+			data = JSON.parse( e.data );
+		} catch( e ) {
+			wpcom_remote_login_final_cleanup();
+			return;
+		}
+
+		if ( data.msg === 'LOGIN' ) {
+			// Clean up the login check iframe
+			wpcom_remote_login_remove_dom_node_id( "wpcom_remote_login_key" );
+
+			var id_regex = new RegExp( /^[0-9]+$/ );
+			var token_regex = new RegExp( /^.*|.*|.*$/ );
+			if (
+				token_regex.test( data.token )
+				&& id_regex.test( data.wpcomid )
+			) {
+				// We have everything we need to ask for a login
+				var script = document.createElement( "script" );
+				script.setAttribute( "id", "wpcom_remote_login_validate" );
+				script.src = '/remote-login.php?wpcom_remote_login=validate'
+					+ '&wpcomid=' + data.wpcomid
+					+ '&token=' + encodeURIComponent( data.token )
+					+ '&host=' + window.location.protocol
+					+ '//' + window.location.hostname
+					+ '&postid=231'
+					+ '&is_singular=';
+				document.body.appendChild( script );
+			}
+
+			return;
+		}
+
+		// Safari ITP, not logged in, so redirect
+		if ( data.msg === 'LOGIN-REDIRECT' ) {
+			window.location = 'https://wordpress.com/log-in?redirect_to=' + window.location.href;
+			return;
+		}
+
+		// Safari ITP, storage access failed, remove the request
+		if ( data.msg === 'LOGIN-REMOVE' ) {
+			var css_zap = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } @media screen and ( max-width: 782px ) { html { margin-top: 0 !important; } * html body { margin-top: 0 !important; } }';
+			var style_zap = document.createElement( 'style' );
+			style_zap.type = 'text/css';
+			style_zap.appendChild( document.createTextNode( css_zap ) );
+			document.body.appendChild( style_zap );
+
+			var e = document.getElementById( 'wpcom_request_access_iframe' );
+			e.parentNode.removeChild( e );
+
+			document.cookie = 'wordpress_com_login_access=denied; path=/; max-age=31536000';
+
+			return;
+		}
+
+		// Safari ITP
+		if ( data.msg === 'REQUEST_ACCESS' ) {
+			console.log( 'request access: safari' );
+
+			// Check ITP iframe enable/disable knob
+			if ( wpcom_remote_login_extra_auth !== 'safari_itp_iframe' ) {
+				return;
+			}
+
+			// If we are in a "private window" there is no ITP.
+			var private_window = false;
+			try {
+				var opendb = window.openDatabase( null, null, null, null );
+			} catch( e ) {
+				private_window = true;
+			}
+
+			if ( private_window ) {
+				console.log( 'private window' );
+				return;
+			}
+
+			var iframe = document.createElement( 'iframe' );
+			iframe.id = 'wpcom_request_access_iframe';
+			iframe.setAttribute( 'scrolling', 'no' );
+			iframe.setAttribute( 'sandbox', 'allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-top-navigation-by-user-activation' );
+			iframe.src = 'https://r-login.wordpress.com/remote-login.php?wpcom_remote_login=request_access&origin=' + encodeURIComponent( data.origin ) + '&wpcomid=' + encodeURIComponent( data.wpcomid );
+
+			var css = 'html { -webkit-transition: margin-top 1s; transition: margin-top 1s; } /* 9001 */ html { margin-top: 46px !important; } * html body { margin-top: 46px !important; } @media screen and ( max-width: 660px ) { html { margin-top: 71px !important; } * html body { margin-top: 71px !important; } #wpcom_request_access_iframe { display: block; height: 71px !important; } } #wpcom_request_access_iframe { border: 0px; height: 46px; position: fixed; top: 0; left: 0; width: 100%; min-width: 100%; z-index: 99999; background: #23282d; } ';
+
+			var style = document.createElement( 'style' );
+			style.type = 'text/css';
+			style.id = 'wpcom_request_access_styles';
+			style.appendChild( document.createTextNode( css ) );
+			document.body.appendChild( style );
+
+			document.body.appendChild( iframe );
+		}
+
+		if ( data.msg === 'DONE' ) {
+			wpcom_remote_login_final_cleanup();
+		}
+	}
+}, false );
+
+// Inject the remote login iframe after the page has had a chance to load
+// more critical resources
+window.addEventListener( "DOMContentLoaded", function( e ) {
+	var iframe = document.createElement( "iframe" );
+	iframe.style.display = "none";
+	iframe.setAttribute( "scrolling", "no" );
+	iframe.setAttribute( "id", "wpcom_remote_login_key" );
+	iframe.src = "https://r-login.wordpress.com/remote-login.php"
+		+ "?wpcom_remote_login=key"
+		+ "&origin=aHR0cHM6Ly9tYXJjb2JvbnphbmluaS5jb20%3D"
+		+ "&wpcomid=82018920"
+		+ "&time=1707139530";
+	document.body.appendChild( iframe );
+}, false );
+</script>
+<link rel='dns-prefetch' href='//s2.wp.com' />
+<link rel='dns-prefetch' href='//s1.wp.com' />
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel="alternate" type="application/rss+xml" title="Marco Bonzanini &raquo; Feed" href="https://marcobonzanini.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Marco Bonzanini &raquo; Comments Feed" href="https://marcobonzanini.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Marco Bonzanini &raquo; Big Data Category Feed" href="https://marcobonzanini.com/category/big-data/feed/" />
+	<script type="text/javascript">
+		/* <![CDATA[ */
+		function addLoadEvent(func) {
+			var oldonload = window.onload;
+			if (typeof window.onload != 'function') {
+				window.onload = func;
+			} else {
+				window.onload = function () {
+					oldonload();
+					func();
+				}
+			}
+		}
+		/* ]]> */
+	</script>
+	<script>
+window._wpemojiSettings = {"baseUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s0.wp.com\/wp-content\/mu-plugins\/wpcom-smileys\/twemoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/s0.wp.com\/wp-includes\/js\/wp-emoji-release.min.js?m=1677072837i&ver=6.5-alpha-57492"}};
+/*! This file is auto-generated */
+!function(i,n){var o,s,e;function c(e){try{var t={supportTests:e,timestamp:(new Date).valueOf()};sessionStorage.setItem(o,JSON.stringify(t))}catch(e){}}function p(e,t,n){e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(t,0,0);var t=new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data),r=(e.clearRect(0,0,e.canvas.width,e.canvas.height),e.fillText(n,0,0),new Uint32Array(e.getImageData(0,0,e.canvas.width,e.canvas.height).data));return t.every(function(e,t){return e===r[t]})}function u(e,t,n){switch(t){case"flag":return n(e,"\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!n(e,"\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!n(e,"\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!n(e,"\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}function f(e,t,n){var r="undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?new OffscreenCanvas(300,150):i.createElement("canvas"),a=r.getContext("2d",{willReadFrequently:!0}),o=(a.textBaseline="top",a.font="600 32px Arial",{});return e.forEach(function(e){o[e]=t(a,e,n)}),o}function t(e){var t=i.createElement("script");t.src=e,t.defer=!0,i.head.appendChild(t)}"undefined"!=typeof Promise&&(o="wpEmojiSettingsSupports",s=["flag","emoji"],n.supports={everything:!0,everythingExceptFlag:!0},e=new Promise(function(e){i.addEventListener("DOMContentLoaded",e,{once:!0})}),new Promise(function(t){var n=function(){try{var e=JSON.parse(sessionStorage.getItem(o));if("object"==typeof e&&"number"==typeof e.timestamp&&(new Date).valueOf()<e.timestamp+604800&&"object"==typeof e.supportTests)return e.supportTests}catch(e){}return null}();if(!n){if("undefined"!=typeof Worker&&"undefined"!=typeof OffscreenCanvas&&"undefined"!=typeof URL&&URL.createObjectURL&&"undefined"!=typeof Blob)try{var e="postMessage("+f.toString()+"("+[JSON.stringify(s),u.toString(),p.toString()].join(",")+"));",r=new Blob([e],{type:"text/javascript"}),a=new Worker(URL.createObjectURL(r),{name:"wpTestEmojiSupports"});return void(a.onmessage=function(e){c(n=e.data),a.terminate(),t(n)})}catch(e){}c(n=f(s,u,p))}t(n)}).then(function(e){for(var t in e)n.supports[t]=e[t],n.supports.everything=n.supports.everything&&n.supports[t],"flag"!==t&&(n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&n.supports[t]);n.supports.everythingExceptFlag=n.supports.everythingExceptFlag&&!n.supports.flag,n.DOMReady=!1,n.readyCallback=function(){n.DOMReady=!0}}).then(function(){return e}).then(function(){var e;n.supports.everything||(n.readyCallback(),(e=n.source||{}).concatemoji?t(e.concatemoji):e.wpemoji&&e.twemoji&&(t(e.twemoji),t(e.wpemoji)))}))}((window,document),window._wpemojiSettings);
+</script>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-1' href='https://s2.wp.com/wp-content/mu-plugins/jetpack-plugin/moon/modules/theme-tools/compat/twentyfifteen.css?m=1685131895i&cssminify=yes' type='text/css' media='all' />
+<style id='wp-emoji-styles-inline-css'>
+
+	img.wp-smiley, img.emoji {
+		display: inline !important;
+		border: none !important;
+		box-shadow: none !important;
+		height: 1em !important;
+		width: 1em !important;
+		margin: 0 0.07em !important;
+		vertical-align: -0.1em !important;
+		background: none !important;
+		padding: 0 !important;
+	}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-2-1' href='https://s1.wp.com/_static/??-eJylzFsKgCAQQNENpaMQWR/RWtIGs0YLH0W7T9pCn5cLB+6TmSNkDBlOKtaFBLbU1BhtPRHhkop3XIAujhbQdJidkdNxjg+k/BByk1ID/6C8ov+gyY9SiU61apD99gImzThk&cssminify=yes' type='text/css' media='all' />
+<style id='wp-block-library-inline-css'>
+.has-text-align-justify {
+	text-align:justify;
+}
+.wp-block-cover__image-background.has-parallax {
+	background-size: cover;
+}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-4-1' href='https://s2.wp.com/_static/??-eJzTLy/QzcxLzilNSS3WzyrWz01NyUxMzUnNTc0rQeEU5CRWphbp5qSmJyZX6uVm5uklFxfr6OPTDpRD5sM02efaGpoZmFkYGRuZGmQBAHPvL0Y=&cssminify=yes' type='text/css' media='all' />
+<style id='jetpack-sharing-buttons-style-inline-css'>
+.jetpack-sharing-buttons__services-list{display:flex;flex-direction:row;flex-wrap:wrap;gap:0;list-style-type:none;margin:5px;padding:0}.jetpack-sharing-buttons__services-list.has-small-icon-size{font-size:12px}.jetpack-sharing-buttons__services-list.has-normal-icon-size{font-size:16px}.jetpack-sharing-buttons__services-list.has-large-icon-size{font-size:24px}.jetpack-sharing-buttons__services-list.has-huge-icon-size{font-size:36px}@media print{.jetpack-sharing-buttons__services-list{display:none!important}}ul.jetpack-sharing-buttons__services-list.has-background{padding:1.25em 2.375em}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-6-1' href='https://s2.wp.com/_static/??-eJyVjEEOwiAQAD/ksgGN4sH4Fko3hJYCYZea/r49mF6Nx0lmBj8VfMlCWbCmHmJmDP3AgVqAIRU/M04k1fkZkttKFwgtjsiyJVKe+YL/LJqTmAP/yH35ZkZpqzRwXGoiaLSqG46R5TTgHL2Xl75bba/GPB/TDthVT3U=&cssminify=yes' type='text/css' media='all' />
+<style id='classic-theme-styles-inline-css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-8-1' href='https://s2.wp.com/_static/??-eJx9jcEKg0AMRH+oaVhorR7Eb9E16IpZg8min2889FZ6GYbhPQYPgbhlo2zIBWQtU8qKcdvJd5be0AmmMfW0Ejv2jKoP/K0daZzIXNdvB6PzvyJ+A8MgO6mCJ6fCYLN/6e113IZXU9WfUL/DcgHSTkDo&cssminify=yes' type='text/css' media='all' />
+<style id='global-styles-inline-css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #fff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--dark-gray: #111;--wp--preset--color--light-gray: #f1f1f1;--wp--preset--color--yellow: #f4ca16;--wp--preset--color--dark-brown: #352712;--wp--preset--color--medium-pink: #e53b51;--wp--preset--color--light-pink: #ffe5d1;--wp--preset--color--dark-purple: #2e2256;--wp--preset--color--purple: #674970;--wp--preset--color--blue-gray: #22313f;--wp--preset--color--bright-blue: #55c3dc;--wp--preset--color--light-blue: #e9f2f9;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--gradient--dark-gray-gradient-gradient: linear-gradient(90deg, rgba(17,17,17,1) 0%, rgba(42,42,42,1) 100%);--wp--preset--gradient--light-gray-gradient: linear-gradient(90deg, rgba(241,241,241,1) 0%, rgba(215,215,215,1) 100%);--wp--preset--gradient--white-gradient: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(230,230,230,1) 100%);--wp--preset--gradient--yellow-gradient: linear-gradient(90deg, rgba(244,202,22,1) 0%, rgba(205,168,10,1) 100%);--wp--preset--gradient--dark-brown-gradient: linear-gradient(90deg, rgba(53,39,18,1) 0%, rgba(91,67,31,1) 100%);--wp--preset--gradient--medium-pink-gradient: linear-gradient(90deg, rgba(229,59,81,1) 0%, rgba(209,28,51,1) 100%);--wp--preset--gradient--light-pink-gradient: linear-gradient(90deg, rgba(255,229,209,1) 0%, rgba(255,200,158,1) 100%);--wp--preset--gradient--dark-purple-gradient: linear-gradient(90deg, rgba(46,34,86,1) 0%, rgba(66,48,123,1) 100%);--wp--preset--gradient--purple-gradient: linear-gradient(90deg, rgba(103,73,112,1) 0%, rgba(131,93,143,1) 100%);--wp--preset--gradient--blue-gray-gradient: linear-gradient(90deg, rgba(34,49,63,1) 0%, rgba(52,75,96,1) 100%);--wp--preset--gradient--bright-blue-gradient: linear-gradient(90deg, rgba(85,195,220,1) 0%, rgba(43,180,211,1) 100%);--wp--preset--gradient--light-blue-gradient: linear-gradient(90deg, rgba(233,242,249,1) 0%, rgba(193,218,238,1) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--font-family--albert-sans: 'Albert Sans', sans-serif;--wp--preset--font-family--alegreya: Alegreya, serif;--wp--preset--font-family--arvo: Arvo, serif;--wp--preset--font-family--bodoni-moda: 'Bodoni Moda', serif;--wp--preset--font-family--cabin: Cabin, sans-serif;--wp--preset--font-family--chivo: Chivo, sans-serif;--wp--preset--font-family--commissioner: Commissioner, sans-serif;--wp--preset--font-family--cormorant: Cormorant, serif;--wp--preset--font-family--courier-prime: 'Courier Prime', monospace;--wp--preset--font-family--crimson-pro: 'Crimson Pro', serif;--wp--preset--font-family--dm-mono: 'DM Mono', monospace;--wp--preset--font-family--dm-sans: 'DM Sans', sans-serif;--wp--preset--font-family--domine: Domine, serif;--wp--preset--font-family--eb-garamond: 'EB Garamond', serif;--wp--preset--font-family--epilogue: Epilogue, sans-serif;--wp--preset--font-family--figtree: Figtree, sans-serif;--wp--preset--font-family--fira-sans: 'Fira Sans', sans-serif;--wp--preset--font-family--fraunces: Fraunces, serif;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--ibm-plex-sans: 'IBM Plex Sans', sans-serif;--wp--preset--font-family--inter: Inter, sans-serif;--wp--preset--font-family--josefin-sans: 'Josefin Sans', sans-serif;--wp--preset--font-family--jost: Jost, sans-serif;--wp--preset--font-family--libre-baskerville: 'Libre Baskerville', serif;--wp--preset--font-family--libre-franklin: 'Libre Franklin', sans-serif;--wp--preset--font-family--literata: Literata, serif;--wp--preset--font-family--lora: Lora, serif;--wp--preset--font-family--merriweather: Merriweather, serif;--wp--preset--font-family--montserrat: Montserrat, sans-serif;--wp--preset--font-family--newsreader: Newsreader, serif;--wp--preset--font-family--nunito: Nunito, sans-serif;--wp--preset--font-family--open-sans: 'Open Sans', sans-serif;--wp--preset--font-family--overpass: Overpass, sans-serif;--wp--preset--font-family--petrona: Petrona, serif;--wp--preset--font-family--piazzolla: Piazzolla, serif;--wp--preset--font-family--playfair-display: 'Playfair Display', serif;--wp--preset--font-family--plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;--wp--preset--font-family--poppins: Poppins, sans-serif;--wp--preset--font-family--raleway: Raleway, sans-serif;--wp--preset--font-family--roboto: Roboto, sans-serif;--wp--preset--font-family--roboto-slab: 'Roboto Slab', serif;--wp--preset--font-family--rubik: Rubik, sans-serif;--wp--preset--font-family--sora: Sora, sans-serif;--wp--preset--font-family--source-sans-3: 'Source Sans 3', sans-serif;--wp--preset--font-family--source-serif-4: 'Source Serif 4', serif;--wp--preset--font-family--space-mono: 'Space Mono', monospace;--wp--preset--font-family--texturina: Texturina, serif;--wp--preset--font-family--work-sans: 'Work Sans', sans-serif;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}:where(.is-layout-grid){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}.has-albert-sans-font-family{font-family: var(--wp--preset--font-family--albert-sans) !important;}.has-alegreya-font-family{font-family: var(--wp--preset--font-family--alegreya) !important;}.has-arvo-font-family{font-family: var(--wp--preset--font-family--arvo) !important;}.has-bodoni-moda-font-family{font-family: var(--wp--preset--font-family--bodoni-moda) !important;}.has-cabin-font-family{font-family: var(--wp--preset--font-family--cabin) !important;}.has-chivo-font-family{font-family: var(--wp--preset--font-family--chivo) !important;}.has-commissioner-font-family{font-family: var(--wp--preset--font-family--commissioner) !important;}.has-cormorant-font-family{font-family: var(--wp--preset--font-family--cormorant) !important;}.has-courier-prime-font-family{font-family: var(--wp--preset--font-family--courier-prime) !important;}.has-crimson-pro-font-family{font-family: var(--wp--preset--font-family--crimson-pro) !important;}.has-dm-mono-font-family{font-family: var(--wp--preset--font-family--dm-mono) !important;}.has-dm-sans-font-family{font-family: var(--wp--preset--font-family--dm-sans) !important;}.has-domine-font-family{font-family: var(--wp--preset--font-family--domine) !important;}.has-eb-garamond-font-family{font-family: var(--wp--preset--font-family--eb-garamond) !important;}.has-epilogue-font-family{font-family: var(--wp--preset--font-family--epilogue) !important;}.has-figtree-font-family{font-family: var(--wp--preset--font-family--figtree) !important;}.has-fira-sans-font-family{font-family: var(--wp--preset--font-family--fira-sans) !important;}.has-fraunces-font-family{font-family: var(--wp--preset--font-family--fraunces) !important;}.has-ibm-plex-mono-font-family{font-family: var(--wp--preset--font-family--ibm-plex-mono) !important;}.has-ibm-plex-sans-font-family{font-family: var(--wp--preset--font-family--ibm-plex-sans) !important;}.has-inter-font-family{font-family: var(--wp--preset--font-family--inter) !important;}.has-josefin-sans-font-family{font-family: var(--wp--preset--font-family--josefin-sans) !important;}.has-jost-font-family{font-family: var(--wp--preset--font-family--jost) !important;}.has-libre-baskerville-font-family{font-family: var(--wp--preset--font-family--libre-baskerville) !important;}.has-libre-franklin-font-family{font-family: var(--wp--preset--font-family--libre-franklin) !important;}.has-literata-font-family{font-family: var(--wp--preset--font-family--literata) !important;}.has-lora-font-family{font-family: var(--wp--preset--font-family--lora) !important;}.has-merriweather-font-family{font-family: var(--wp--preset--font-family--merriweather) !important;}.has-montserrat-font-family{font-family: var(--wp--preset--font-family--montserrat) !important;}.has-newsreader-font-family{font-family: var(--wp--preset--font-family--newsreader) !important;}.has-nunito-font-family{font-family: var(--wp--preset--font-family--nunito) !important;}.has-open-sans-font-family{font-family: var(--wp--preset--font-family--open-sans) !important;}.has-overpass-font-family{font-family: var(--wp--preset--font-family--overpass) !important;}.has-petrona-font-family{font-family: var(--wp--preset--font-family--petrona) !important;}.has-piazzolla-font-family{font-family: var(--wp--preset--font-family--piazzolla) !important;}.has-playfair-display-font-family{font-family: var(--wp--preset--font-family--playfair-display) !important;}.has-plus-jakarta-sans-font-family{font-family: var(--wp--preset--font-family--plus-jakarta-sans) !important;}.has-poppins-font-family{font-family: var(--wp--preset--font-family--poppins) !important;}.has-raleway-font-family{font-family: var(--wp--preset--font-family--raleway) !important;}.has-roboto-font-family{font-family: var(--wp--preset--font-family--roboto) !important;}.has-roboto-slab-font-family{font-family: var(--wp--preset--font-family--roboto-slab) !important;}.has-rubik-font-family{font-family: var(--wp--preset--font-family--rubik) !important;}.has-sora-font-family{font-family: var(--wp--preset--font-family--sora) !important;}.has-source-sans-3-font-family{font-family: var(--wp--preset--font-family--source-sans-3) !important;}.has-source-serif-4-font-family{font-family: var(--wp--preset--font-family--source-serif-4) !important;}.has-space-mono-font-family{font-family: var(--wp--preset--font-family--space-mono) !important;}.has-texturina-font-family{font-family: var(--wp--preset--font-family--texturina) !important;}.has-work-sans-font-family{font-family: var(--wp--preset--font-family--work-sans) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}:where(.wp-block-columns.is-layout-grid){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+:where(.wp-block-post-template.is-layout-flex){gap: 1.25em;}:where(.wp-block-post-template.is-layout-grid){gap: 1.25em;}
+</style>
+<link rel='stylesheet' id='twentyfifteen-fonts-css' href='https://s2.wp.com/wp-content/themes/pub/twentyfifteen/assets/fonts/noto-sans-plus-noto-serif-plus-inconsolata.css?ver=20230328' media='all' />
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-12-1' href='https://s0.wp.com/_static/??-eJyNjbEOwjAQQ3+IYhWlFQyIT0H0dC1pk0vEXVT174lQBwYGNtt6trHmhpIYiyGWJocyeVHMbPlBy+4RUxLcvRAmFn752tDf8kiqB3yN2pMjK3IZYGsNttGPxixQ2wL/j1cQQ0i0fC5u8dr25649XZxz8xtDC0n5&cssminify=yes' type='text/css' media='all' />
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentyfifteen-ie-css' href='https://s2.wp.com/wp-content/themes/pub/twentyfifteen/css/ie.css?m=1683318229i&#038;ver=20220908' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentyfifteen-ie7-css' href='https://s2.wp.com/wp-content/themes/pub/twentyfifteen/css/ie7.css?m=1418225460i&#038;ver=20141210' media='all' />
+<![endif]-->
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-16-1' href='https://s0.wp.com/_static/??-eJx9jUEKAjEMRS9kDWVQmYV4lpmS1kqalElKmdtb3agbd/99eDzo1QVhQzawOxZUqG0F6+PYY46GyBBUQW0ndL0GKcfBB/gSS3OVWsqskFAcSVgsC/+Ai7Tk7Z+64UqSxkzv4Adf0q1c/clPZ3+Zp/nxBM/VQ5o=&cssminify=yes' type='text/css' media='all' />
+<style id='jetpack-global-styles-frontend-style-inline-css'>
+:root { --font-headings: unset; --font-base: unset; --font-headings-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif; --font-base-default: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;}
+</style>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-18-1' href='https://s2.wp.com/wp-content/themes/h4/global.css?m=1420737423i&cssminify=yes' type='text/css' media='all' />
+<script id="media-video-jwt-bridge-js-extra">
+var videopressAjax = {"ajaxUrl":"https:\/\/marcobonzanini.wordpress.com\/wp-admin\/admin-ajax.php","bridgeUrl":"\/wp-content\/mu-plugins\/jetpack-plugin\/moon\/jetpack_vendor\/automattic\/jetpack-videopress\/build\/lib\/token-bridge.js","post_id":"231"};
+</script>
+<script id="wpcom-actionbar-placeholder-js-extra">
+var actionbardata = {"siteID":"82018920","postID":"0","siteURL":"https:\/\/marcobonzanini.com","xhrURL":"https:\/\/marcobonzanini.com\/wp-admin\/admin-ajax.php","nonce":"4e7b800f83","isLoggedIn":"","statusMessage":"","subsEmailDefault":"instantly","proxyScriptUrl":"https:\/\/s0.wp.com\/wp-content\/js\/wpcom-proxy-request.js?ver=20211021","i18n":{"followedText":"New posts from this site will now appear in your <a href=\"https:\/\/wordpress.com\/read\">Reader<\/a>","foldBar":"Collapse this bar","unfoldBar":"Expand this bar"}};
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='https://s0.wp.com/_static/??-eJyFjsEOwjAMQ3+IrtsBTRwQn4LaNUzp2qS06WB/z5A2BCdOVuxnOfqR1MAkQKJ90ZEtBlC1QDbj6imkGze+HPQvl4OolPm57BnSEKqD8g79vUJeNmki0l9IRRyzEfiG97VYVQp1RFo7IMkM03avzzLt3nUGcpy1qcLRiODwoWd0wClDKdpWDE4HtFp4AlI2oxthXbzEc9e3bdt3x1PrX89xZ2Y='></script>
+<script id="rlt-proxy-js-after">
+	window.addEventListener( 'DOMContentLoaded', function() {
+		rltInitialize( {"token":null,"iframeOrigins":["https:\/\/widgets.wp.com"]} );
+	} );
+</script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://marcobonzanini.wordpress.com/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress.com" />
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Big Data &#8211; Marco Bonzanini" />
+<meta property="og:url" content="https://marcobonzanini.com/category/big-data/" />
+<meta property="og:site_name" content="Marco Bonzanini" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:image:alt" content="" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:creator" content="@marcobonzanini" />
+<meta name="twitter:site" content="@marcobonzanini" />
+
+<!-- End Jetpack Open Graph Tags -->
+<link rel="shortcut icon" type="image/x-icon" href="https://s1.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48" />
+<link rel="icon" type="image/x-icon" href="https://s1.wp.com/i/favicon.ico" sizes="16x16 24x24 32x32 48x48" />
+<link rel="apple-touch-icon" href="https://s2.wp.com/i/webclip.png" />
+<link rel='openid.server' href='https://marcobonzanini.com/?openidserver=1' />
+<link rel='openid.delegate' href='https://marcobonzanini.com/' />
+<link rel="search" type="application/opensearchdescription+xml" href="https://marcobonzanini.com/osd.xml" title="Marco Bonzanini" />
+<link rel="search" type="application/opensearchdescription+xml" href="https://s1.wp.com/opensearch.xml" title="WordPress.com" />
+<meta name="theme-color" content="#f1f1f1" />
+		<style type="text/css">
+			.recentcomments a {
+				display: inline !important;
+				padding: 0 !important;
+				margin: 0 !important;
+			}
+
+			table.recentcommentsavatartop img.avatar, table.recentcommentsavatarend img.avatar {
+				border: 0px;
+				margin: 0;
+			}
+
+			table.recentcommentsavatartop a, table.recentcommentsavatarend a {
+				border: 0px !important;
+				background-color: transparent !important;
+			}
+
+			td.recentcommentsavatarend, td.recentcommentsavatartop {
+				padding: 0px 0px 1px 0px;
+				margin: 0px;
+			}
+
+			td.recentcommentstextend {
+				border: none !important;
+				padding: 0px 0px 2px 10px;
+			}
+
+			.rtl td.recentcommentstextend {
+				padding: 0px 10px 2px 0px;
+			}
+
+			td.recentcommentstexttop {
+				border: none;
+				padding: 0px 0px 0px 10px;
+			}
+
+			.rtl td.recentcommentstexttop {
+				padding: 0px 10px 0px 0px;
+			}
+		</style>
+		<meta name="application-name" content="Marco Bonzanini" /><meta name="msapplication-window" content="width=device-width;height=device-height" /><meta name="msapplication-task" content="name=Subscribe;action-uri=https://marcobonzanini.com/feed/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=https://s1.wp.com/i/favicon.ico" /><meta name="description" content="Posts about Big Data written by Marco" />
+<!-- Your Google Analytics Plugin is missing the tracking ID -->
+</head>
+
+<body class="archive category category-big-data category-2075170 wp-embed-responsive customizer-styles-applied jetpack-reblog-enabled">
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">
+		Skip to content	</a>
+
+	<div id="sidebar" class="sidebar">
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-branding">
+				<a href="https://marcobonzanini.com/" class="site-logo-link" rel="home" itemprop="url"></a>
+										<p class="site-title"><a href="https://marcobonzanini.com/" rel="home">Marco Bonzanini</a></p>
+										<button class="secondary-toggle">Menu and widgets</button>
+			</div><!-- .site-branding -->
+		</header><!-- .site-header -->
+
+			<div id="secondary" class="secondary">
+
+					<nav id="site-navigation" class="main-navigation" role="navigation">
+				<div class="menu-pages-container"><ul id="menu-pages" class="nav-menu"><li id="menu-item-449" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-449"><a href="https://marcobonzanini.com/newsletter/">Newsletter &#8211; Musings on Data</a></li>
+<li id="menu-item-388" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-388"><a href="https://marcobonzanini.com/python-training/">Python Training</a></li>
+<li id="menu-item-61" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-61"><a href="https://marcobonzanini.com/publications/">Books &amp; Articles</a></li>
+<li id="menu-item-311" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-311"><a href="https://marcobonzanini.com/speaking/">Presentations</a></li>
+<li id="menu-item-36" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-36"><a href="https://marcobonzanini.com/about/">About Me</a></li>
+</ul></div>			</nav><!-- .main-navigation -->
+		
+		
+					<div id="widget-area" class="widget-area" role="complementary">
+				<aside id="text-5" class="widget widget_text">			<div class="textwidget"><a href="https://twitter.com/marcobonzanini" class="twitter-follow-button" data-show-count="false" data-text-color="#333333" data-link-color="#333333">Follow @marcobonzanini</a></div>
+		</aside><aside id="media_image-3" class="widget widget_media_image"><h2 class="widget-title">Book</h2><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://www.packtpub.com/big-data-and-business-intelligence/mastering-social-media-mining-python"><img class="image aligncenter" src="https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=100&#038;h=850" alt="Mastering Social Media Mining with Python" width="150" height="123" /></a></aside><aside id="media_image-5" class="widget widget_media_image"><h2 class="widget-title">Video Course</h2><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://www.packtpub.com/application-development/data-analysis-python-video"><img width="150" height="185" src="https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=150" class="image wp-image-329 aligncenter attachment-150x1000 size-150x1000" alt="Data Analysis with Python" decoding="async" style="max-width: 100%; height: auto;" title="Data Analysis with Python" srcset="https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=150 150w, https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=300 300w, https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=122 122w, https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=243 243w" sizes="(max-width: 150px) 100vw, 150px" data-attachment-id="329" data-permalink="https://marcobonzanini.com/2017/05/03/video-course-data-analysis-with-python/videocourse-cover/" data-orig-file="https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png" data-orig-size="810,1000" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="VideoCourse-Cover" data-image-description="" data-image-caption="" data-medium-file="https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=243" data-large-file="https://marcobonzanini.files.wordpress.com/2017/05/videocourse-cover.png?w=660" /></a></aside><aside id="media_image-7" class="widget widget_media_image"><h2 class="widget-title">Video Course</h2><style>.widget.widget_media_image { overflow: hidden; }.widget.widget_media_image img { height: auto; max-width: 100%; }</style><a href="https://www.packtpub.com/application-development/practical-python-data-science-techniques-video"><img width="150" height="185" src="https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=150" class="image wp-image-339 aligncenter attachment-150x185 size-150x185" alt="Practical Python Data Science Techniques" decoding="async" style="max-width: 100%; height: auto;" title="Practical Python Data Science Techniques: video course cover" srcset="https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=150 150w, https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=300 300w, https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=122 122w, https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=243 243w" sizes="(max-width: 150px) 100vw, 150px" data-attachment-id="339" data-permalink="https://marcobonzanini.com/videocourse-cover-2/" data-orig-file="https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png" data-orig-size="810,1000" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="VideoCourse-Cover" data-image-description="" data-image-caption="" data-medium-file="https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=243" data-large-file="https://marcobonzanini.files.wordpress.com/2017/09/videocourse-cover.png?w=660" /></a></aside>
+		<aside id="recent-posts-5" class="widget widget_recent_entries">
+		<h2 class="widget-title">Recent Posts</h2><nav aria-label="Recent Posts">
+		<ul>
+											<li>
+					<a href="https://marcobonzanini.com/2021/09/15/tips-for-saving-memory-with-pandas/">Tips for saving memory with&nbsp;pandas</a>
+											<span class="post-date">September 15, 2021</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2021/07/21/intervista-pythonista-podcast-interview-for-the-italian-python-community/">Intervista Pythonista: Podcast Interview for the Italian Python&nbsp;Community</a>
+											<span class="post-date">July 21, 2021</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2021/04/22/getting-into-data-science-presentation-at-hisar-coding-summit-2021/">Getting into Data Science presentation at Hisar Coding Summit&nbsp;2021</a>
+											<span class="post-date">April 22, 2021</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2021/01/25/feature-scaling-machine-learning-notes/">Feature Scaling &#8211; Machine Learning&nbsp;Notes</a>
+											<span class="post-date">January 25, 2021</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2021/01/21/python-and-data-science/">Python and Data&nbsp;Science</a>
+											<span class="post-date">January 21, 2021</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2018/05/03/pydata-london-2018/">PyData London 2018</a>
+											<span class="post-date">May 3, 2018</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2017/09/13/video-course-practical-python-data-science-techniques/">Video Course: Practical Python Data Science&nbsp;Techniques</a>
+											<span class="post-date">September 13, 2017</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2017/05/03/video-course-data-analysis-with-python/">Video Course: Data Analysis with&nbsp;Python</a>
+											<span class="post-date">May 3, 2017</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2017/04/11/pycon-italy-2017-write-up/">PyCon Italy 2017&nbsp;write-up</a>
+											<span class="post-date">April 11, 2017</span>
+									</li>
+											<li>
+					<a href="https://marcobonzanini.com/2016/09/25/pycon-uk-2016-write-up/">PyCon UK 2016&nbsp;write-up</a>
+											<span class="post-date">September 25, 2016</span>
+									</li>
+					</ul>
+
+		</nav></aside><aside id="archives-4" class="widget widget_archive"><h2 class="widget-title">Archives</h2><nav aria-label="Archives">
+			<ul>
+					<li><a href='https://marcobonzanini.com/2021/09/'>September 2021</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2021/07/'>July 2021</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2021/04/'>April 2021</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2021/01/'>January 2021</a>&nbsp;(2)</li>
+	<li><a href='https://marcobonzanini.com/2018/05/'>May 2018</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2017/09/'>September 2017</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2017/05/'>May 2017</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2017/04/'>April 2017</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2016/09/'>September 2016</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2016/08/'>August 2016</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2016/05/'>May 2016</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2016/04/'>April 2016</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2015/12/'>December 2015</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2015/11/'>November 2015</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2015/10/'>October 2015</a>&nbsp;(1)</li>
+	<li><a href='https://marcobonzanini.com/2015/09/'>September 2015</a>&nbsp;(2)</li>
+	<li><a href='https://marcobonzanini.com/2015/08/'>August 2015</a>&nbsp;(3)</li>
+	<li><a href='https://marcobonzanini.com/2015/07/'>July 2015</a>&nbsp;(2)</li>
+	<li><a href='https://marcobonzanini.com/2015/06/'>June 2015</a>&nbsp;(3)</li>
+	<li><a href='https://marcobonzanini.com/2015/05/'>May 2015</a>&nbsp;(2)</li>
+	<li><a href='https://marcobonzanini.com/2015/04/'>April 2015</a>&nbsp;(3)</li>
+	<li><a href='https://marcobonzanini.com/2015/03/'>March 2015</a>&nbsp;(4)</li>
+	<li><a href='https://marcobonzanini.com/2015/02/'>February 2015</a>&nbsp;(4)</li>
+	<li><a href='https://marcobonzanini.com/2015/01/'>January 2015</a>&nbsp;(4)</li>
+			</ul>
+
+			</nav></aside><aside id="categories-4" class="widget widget_categories"><h2 class="widget-title">Categories</h2><nav aria-label="Categories">
+			<ul>
+					<li class="cat-item cat-item-4276"><a href="https://marcobonzanini.com/category/api/">API</a> (2)
+</li>
+	<li class="cat-item cat-item-2185"><a href="https://marcobonzanini.com/category/best-practices/">Best Practices</a> (2)
+</li>
+	<li class="cat-item cat-item-2075170 current-cat"><a aria-current="page" href="https://marcobonzanini.com/category/big-data/">Big Data</a> (4)
+</li>
+	<li class="cat-item cat-item-178"><a href="https://marcobonzanini.com/category/books/">Books</a> (1)
+</li>
+	<li class="cat-item cat-item-9204"><a href="https://marcobonzanini.com/category/conferences/">Conferences</a> (7)
+</li>
+	<li class="cat-item cat-item-867"><a href="https://marcobonzanini.com/category/data-mining/">Data Mining</a> (8)
+</li>
+	<li class="cat-item cat-item-21818323"><a href="https://marcobonzanini.com/category/data-science/">data science</a> (3)
+</li>
+	<li class="cat-item cat-item-129632"><a href="https://marcobonzanini.com/category/data-visualisation/">Data Visualisation</a> (2)
+</li>
+	<li class="cat-item cat-item-50684163"><a href="https://marcobonzanini.com/category/elasticsearch/">Elasticsearch</a> (6)
+</li>
+	<li class="cat-item cat-item-25393"><a href="https://marcobonzanini.com/category/engineering/">Engineering</a> (2)
+</li>
+	<li class="cat-item cat-item-116486"><a href="https://marcobonzanini.com/category/functional-programming/">Functional Programming</a> (1)
+</li>
+	<li class="cat-item cat-item-43773684"><a href="https://marcobonzanini.com/category/graph-databases/">Graph Databases</a> (1)
+</li>
+	<li class="cat-item cat-item-457"><a href="https://marcobonzanini.com/category/javascript/">Javascript</a> (3)
+</li>
+	<li class="cat-item cat-item-1618"><a href="https://marcobonzanini.com/category/london/">London</a> (4)
+</li>
+	<li class="cat-item cat-item-40978"><a href="https://marcobonzanini.com/category/machine-learning/">Machine Learning</a> (2)
+</li>
+	<li class="cat-item cat-item-1133"><a href="https://marcobonzanini.com/category/maps/">Maps</a> (1)
+</li>
+	<li class="cat-item cat-item-251438"><a href="https://marcobonzanini.com/category/meet-ups/">Meet-ups</a> (3)
+</li>
+	<li class="cat-item cat-item-21954763"><a href="https://marcobonzanini.com/category/mongodb/">MongoDB</a> (1)
+</li>
+	<li class="cat-item cat-item-11651972"><a href="https://marcobonzanini.com/category/neo4j/">Neo4j</a> (1)
+</li>
+	<li class="cat-item cat-item-47433"><a href="https://marcobonzanini.com/category/nlp/">NLP</a> (9)
+</li>
+	<li class="cat-item cat-item-22319505"><a href="https://marcobonzanini.com/category/nosql/">NoSQL</a> (1)
+</li>
+	<li class="cat-item cat-item-32629"><a href="https://marcobonzanini.com/category/pandas/">pandas</a> (1)
+</li>
+	<li class="cat-item cat-item-1142"><a href="https://marcobonzanini.com/category/podcast/">Podcast</a> (1)
+</li>
+	<li class="cat-item cat-item-832"><a href="https://marcobonzanini.com/category/python/">Python</a> (34)
+</li>
+	<li class="cat-item cat-item-437733"><a href="https://marcobonzanini.com/category/relevance/">Relevance</a> (2)
+</li>
+	<li class="cat-item cat-item-384531"><a href="https://marcobonzanini.com/category/retrocomputing/">Retrocomputing</a> (1)
+</li>
+	<li class="cat-item cat-item-2373"><a href="https://marcobonzanini.com/category/search/">Search</a> (7)
+</li>
+	<li class="cat-item cat-item-4473055"><a href="https://marcobonzanini.com/category/sentiment-analysis/">Sentiment Analysis</a> (2)
+</li>
+	<li class="cat-item cat-item-63429"><a href="https://marcobonzanini.com/category/spark/">Spark</a> (1)
+</li>
+	<li class="cat-item cat-item-2495437"><a href="https://marcobonzanini.com/category/text-analytics/">Text Analytics</a> (3)
+</li>
+	<li class="cat-item cat-item-186779"><a href="https://marcobonzanini.com/category/text-mining/">Text Mining</a> (2)
+</li>
+	<li class="cat-item cat-item-37551101"><a href="https://marcobonzanini.com/category/text-summarisation/">Text Summarisation</a> (1)
+</li>
+	<li class="cat-item cat-item-1"><a href="https://marcobonzanini.com/category/uncategorized/">Uncategorized</a> (2)
+</li>
+			</ul>
+
+			</nav></aside><aside id="text-3" class="widget widget_text">			<div class="textwidget">Copyright Marco Bonzanini, 2015-2021. All rights reserved. Unauthorised use and/or duplication of this material without express and written permission from this site's owner is strictly prohibited. </div>
+		</aside>			</div><!-- .widget-area -->
+		
+	</div><!-- .secondary -->
+
+	</div><!-- .sidebar -->
+
+	<div id="content" class="site-content">
+
+	<section id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Category: <span>Big Data</span></h1>			</header><!-- .page-header -->
+
+			
+<article id="post-231" class="post-231 post type-post status-publish format-standard hentry category-api category-big-data category-books category-data-mining category-nlp category-python category-text-analytics category-text-mining tag-book tag-data-mining-2 tag-pydata tag-python-2 tag-social-media tag-social-media-mining tag-text-mining-2">
+	
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://marcobonzanini.com/2016/08/02/mastering-social-media-mining-with-python/" rel="bookmark">Mastering Social Media Mining with&nbsp;Python</a></h2>	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p><img data-attachment-id="237" data-permalink="https://marcobonzanini.com/2016/08/02/mastering-social-media-mining-with-python/book-cover/" data-orig-file="https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg" data-orig-size="2077,2560" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="book-cover" data-image-description="" data-image-caption="" data-medium-file="https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=243" data-large-file="https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=660" class="  wp-image-237 aligncenter" src="https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=345&#038;h=425" alt="book-cover" width="345" height="425" srcset="https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=345&amp;h=425 345w, https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=690&amp;h=850 690w, https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=122&amp;h=150 122w, https://marcobonzanini.files.wordpress.com/2016/08/book-cover.jpg?w=243&amp;h=300 243w" sizes="(max-width: 345px) 100vw, 345px"></p>
+<p>Great news, my book on data mining for social media is finally out!</p>
+<p>The title is <strong>Mastering Social Media Mining with Python</strong>. I&#8217;ve been working with Packt Publishing over the past few months, and in July the book has been finalised and released.</p>
+<p>Links:</p>
+<ul>
+<li>ebook and paperback on <a href="https://www.packtpub.com/big-data-and-business-intelligence/mastering-social-media-mining-python">Packt Publishing</a> (the publisher)</li>
+<li>ebook and paperback on <a href="https://www.amazon.com/Mastering-Social-Media-Mining-Python/dp/1783552018">Amazon.com</a> and <a href="https://www.amazon.co.uk/Mastering-Social-Media-Mining-Python/dp/1783552018">Amazon UK</a></li>
+<li><a href="https://github.com/bonzanini/Book-SocialMediaMiningPython">Companion code for the book</a> on my GitHub</li>
+<li><a href="https://goodreads.com/marcobonzanini">Author&#8217;s profile on goodreads</a> (inc. book ratings/reviews)</li>
+</ul>
+<p>As part of Packt&#8217;s <em>Mastering</em> series, the book assumes the readers already have some basic understanding of Python (e.g. <tt>for</tt> loops and classes), but more advanced concepts are discussed with examples. No particular experience with Social Media APIs and Data Mining is required. With 300+ pages, by the end of the book, the readers should be able to build their own data mining projects using data from social media and Python tools.</p>
+<p>A bird&#8217;s eye view on the content:</p>
+<ol>
+<li>Social Media, Social Data and Python
+<ul>
+<li>Introduction on Social Media and Social Data: challenges and opportunities</li>
+<li>Introduction on Python tools for Data Science</li>
+<li>Overview on the use of public APIs to interact with social media platforms</li>
+</ul>
+</li>
+<li>#MiningTwitter: Hashtags, Topics and Time Series
+<ul>
+<li>Interacting with the Twitter API in Python</li>
+<li>Twitter data: the anatomy of a tweet</li>
+<li>Entity analysis, text analysis, time series analysis on tweets</li>
+</ul>
+</li>
+<li>Users, Followers, and Communities on Twitter
+<ul>
+<li>Analysing who follows whom</li>
+<li>Mining your followers</li>
+<li>Mining communities</li>
+<li>Visualising tweets on a map</li>
+</ul>
+</li>
+<li>Posts, Pages and User Interactions on Facebook
+<ul>
+<li>Interacting the Facebook Graph API in Python</li>
+<li>Mining you posts</li>
+<li>Mining Facebook Pages</li>
+</ul>
+</li>
+<li>Topic analysis on Google Plus
+<ul>
+<li>Interacting with the Google Plus API in Python</li>
+<li>Finding people and pages on G+</li>
+<li>Analysis of notes and activities on G+</li>
+</ul>
+</li>
+<li>Questions and Answers on Stack Exchange
+<ul>
+<li>Interacting with the StackOverflow API in Python</li>
+<li>Text classification for question tags</li>
+</ul>
+</li>
+<li>Blogs, RSS, Wikipedia, and Natural Language Processing
+<ul>
+<li>Blogs and web pages as social data Web scraping with Python</li>
+<li>Basics of text analytics on blog posts</li>
+<li>Information extraction from text</li>
+</ul>
+</li>
+<li>Mining All the Data!
+<ul>
+<li>Interacting with many other APIs and types of objects</li>
+<li>Examples of interaction with YouTube, Yelp and GitHub</li>
+</ul>
+</li>
+<li>Linked Data and the Semantic Web
+<ul>
+<li>The Web as Social Media</li>
+<li>Mining relations from DBpedia</li>
+<li>Mining geo coordinates</li>
+</ul>
+</li>
+</ol>
+<p>The detailed table of contents is shown on the <a href="https://www.packtpub.com/big-data-and-business-intelligence/mastering-social-media-mining-python">Packt Pub&#8217;s page</a>. Chapter 2 is also offered as free sample.</p>
+<p>Please have a look at the <a href="https://github.com/bonzanini/Book-SocialMediaMiningPython">companion code for the book</a> on my GitHub, so you can have an idea of the applications discussed in the book.</p>
+	</div><!-- .entry-content -->
+
+	
+	<footer class="entry-footer">
+		<span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="https://marcobonzanini.com/2016/08/02/mastering-social-media-mining-with-python/" rel="bookmark"><time class="entry-date published" datetime="2016-08-02T06:40:24+00:00">August 2, 2016</time><time class="updated" datetime="2021-01-21T16:12:25+00:00">January 21, 2021</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://marcobonzanini.com/category/api/" rel="category tag">API</a>, <a href="https://marcobonzanini.com/category/big-data/" rel="category tag">Big Data</a>, <a href="https://marcobonzanini.com/category/books/" rel="category tag">Books</a>, <a href="https://marcobonzanini.com/category/data-mining/" rel="category tag">Data Mining</a>, <a href="https://marcobonzanini.com/category/nlp/" rel="category tag">NLP</a>, <a href="https://marcobonzanini.com/category/python/" rel="category tag">Python</a>, <a href="https://marcobonzanini.com/category/text-analytics/" rel="category tag">Text Analytics</a>, <a href="https://marcobonzanini.com/category/text-mining/" rel="category tag">Text Mining</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="https://marcobonzanini.com/tag/book/" rel="tag">book</a>, <a href="https://marcobonzanini.com/tag/data-mining-2/" rel="tag">data mining</a>, <a href="https://marcobonzanini.com/tag/pydata/" rel="tag">pydata</a>, <a href="https://marcobonzanini.com/tag/python-2/" rel="tag">python</a>, <a href="https://marcobonzanini.com/tag/social-media/" rel="tag">social media</a>, <a href="https://marcobonzanini.com/tag/social-media-mining/" rel="tag">social media mining</a>, <a href="https://marcobonzanini.com/tag/text-mining-2/" rel="tag">text mining</a></span><span class="comments-link"><a href="https://marcobonzanini.com/2016/08/02/mastering-social-media-mining-with-python/#comments">22 Comments<span class="screen-reader-text"> on Mastering Social Media Mining with&nbsp;Python</span></a></span>			</footer><!-- .entry-footer -->
+
+</article><!-- #post-231 -->
+
+<article id="post-205" class="post-205 post type-post status-publish format-standard hentry category-big-data category-engineering category-python tag-big-data-2 tag-data-science tag-engineering-2 tag-luigi tag-python-2">
+	
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://marcobonzanini.com/2015/11/21/adding-slack-notifications-to-a-luigi-pipeline-in-python/" rel="bookmark">Adding Slack Notifications to a Luigi Pipeline in&nbsp;Python</a></h2>	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>In a previous article, I&#8217;ve described <a href="https://marcobonzanini.com/2015/10/24/building-data-pipelines-with-python-and-luigi/">how to build a data pipeline in Python</a> using <a href="https://github.com/spotify/luigi">Luigi</a>, a workflow manager written in Python and open sourced by Spotify. I also had the opportunity to give a short talk about Luigi at the local <a href="http://www.meetup.com/PyData-London-Meetup/">PyData London meetup</a> (see <a href="https://speakerdeck.com/marcobonzanini/let-luigi-do-the-plumbing-for-you-at-pydata-london-meetup">slides</a>).</p>
+<p>One of the nice features of Luigi is the possibility of receiving e-mail notifications on error. While this is a useful feature, it&#8217;s tailored to errors only, so effectively you don&#8217;t know if the Luigi pipeline has completed its execution successfully, unless you manually check. As I wanted to extend the possibility of receiving a notification on Slack, also in case of success, I started looking around for the options. </p>
+<p>I ended up developing my own solution: <a href="https://github.com/bonzanini/luigi-slack">https://github.com/bonzanini/luigi-slack</a>. This blog post is a brief overview on how to use this Python package with your Luigi pipeline.</p>
+<h2>Getting started with luigi-slack</h2>
+<p>From your organisation&#8217;s Slack page (e.g. yourname.slack.com) you can add a Bot integration. The setup is very quick, and you&#8217;ll receive a token that you&#8217;ll need to use to interact with the Slack API.</p>
+<p>You can get the bleeding edge version of <tt>luigi-slack</tt>from the GitHub link above, but beware that this is a work in progress. A somewhat stable version is available from the cheese shop:</p>
+<pre>pip install luigi-slack</pre>
+<p>The key points of this package are:</p>
+<ul>
+<li>Support for Python 3</li>
+<li>Easy-to-use interface</li>
+</ul>
+<p>Regarding the first point, the discussion on choosing Python 2 vs Python 3 is still never-ending and I&#8217;m not going there in this post. For a greenfield project, I prefer to use Python 3 rather than a version with a sunset date already decided. The support for Python 2 in luigi-slack is best-effort (and of course pull requests are always welcome).</p>
+<p>In terms of easy-to-use interface, I borrowed the nice idea of using a context manager from <a href="https://github.com/hudl/luigi-monitor">luigi-monitor</a>, because it makes it easy to integrate the library with an existing pipeline.</p>
+<p>For example, given the basic code to run a Luigi pipeline which ends with the task <tt>YourTaskClass</tt>:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+import luigi
+
+if __name__ == '__main__':
+    luigi.run(main_task_cls=YourTaskClass)
+</pre>
+<p>All we need in order to have Slack notifications is to refactor as follows:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+import luigi
+from luigi_slack import SlackBot, notify
+
+if __name__ == '__main__':
+    slacker = SlackBot(token='my-token',
+                       channels=['mychannel', 'anotherchannel'])
+    with notify(slacker):
+        luigi.run(main_task_cls=YourTaskClass)
+</pre>
+<h2>Configuration Options for luigi-slack</h2>
+<p>The <tt>SlackBot</tt> takes a number of arguments. Besides the token, which allows you to connect to your organisation&#8217;s Slack, all the other parameters are optional:</p>
+<ul>
+<li><tt>channels</tt> (default empty list) is the list of channel names that you want to push the notifications to. For the channel name, you don&#8217;t need the initial <tt>#</tt> symbol. You can also deliver the notifications to a single account, by using the <tt>@username</tt> syntax</li>
+<li><tt>events</tt> (default to [FAILURE]) is the list of event types, as defined in <tt>luigi_slack</tt>, that you want to track</li>
+<li><tt>max_events</tt> (default to 5) is the max number of events of a given type that you want to report. With more than <tt>max_events</tt> events of the same type, a &#8220;please check logs&#8221; message is reported instead</li>
+<li><tt>username</tt> (default to &#8220;Luigi-slack Bot&#8221;) is the screen name of your bot</li>
+<li><tt>task_representation</tt> (default to <tt>str</tt>) is the function used to represent the task in the notification (see explanation below)</li>
+</ul>
+<p>In Luigi, representing a task as a string will print the <tt>task_id</tt> attribute of a <tt>luigi.Task</tt>, which include the class name as well as all the parameters. In other words, it looks like:</p>
+<p>MyTask(param1=&#8221;some_value&#8221;, param2=&#8221;other_value&#8221;, your_secret_param=&#8221;your_secret_value&#8221;, &#8230;)</p>
+<p>With a huge number of parameters that make the notification less readable, or with sensible parameters that you don&#8217;t want to send around in the Slack chat room, it makes sense to display the task a more conservative way. An example of custom string representation could be:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+def custom_task_representation(task):
+    return &quot;{}(...)&quot;.format(task.__class__.__name__)
+</pre>
+<p>Once we pass the function as <tt>task_representation</tt> argument of the SlackBot, the task will appear in the notifications as:</p>
+<p>MyTask(&#8230;)</p>
+<p>Keep in mind that an instance of a Luigi task is identified by the class name AND the value of its parameters, which is why the <tt>task_id</tt> include them all. In other words, with a more compact representation like the one proposed in the above snippet, you won&#8217;t be able to distinguish between tasks with the same class name, but different param values. You&#8217;ll need to customise the function based on your needs.</p>
+<h2>Summary</h2>
+<p>I&#8217;m developing a Python package to include Slack notification support to a Luigi pipeline, with a simple interface, a few optional configuration parameters, and minimal requirements in terms of refactoring.</p>
+<p>The code is available at <a href="https://github.com/bonzanini/luigi-slack">https://github.com/bonzanini/luigi-slack</a>, and you can install the Python package with:</p>
+<pre>pip install luigi_slack</pre>
+<p>As this is a work in progress, it&#8217;s not widely tested, and the interface could change. Comments and pull requests are welcome.</p>
+	</div><!-- .entry-content -->
+
+	
+	<footer class="entry-footer">
+		<span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="https://marcobonzanini.com/2015/11/21/adding-slack-notifications-to-a-luigi-pipeline-in-python/" rel="bookmark"><time class="entry-date published updated" datetime="2015-11-21T10:40:13+00:00">November 21, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://marcobonzanini.com/category/big-data/" rel="category tag">Big Data</a>, <a href="https://marcobonzanini.com/category/engineering/" rel="category tag">Engineering</a>, <a href="https://marcobonzanini.com/category/python/" rel="category tag">Python</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="https://marcobonzanini.com/tag/big-data-2/" rel="tag">big data</a>, <a href="https://marcobonzanini.com/tag/data-science/" rel="tag">data science</a>, <a href="https://marcobonzanini.com/tag/engineering-2/" rel="tag">engineering</a>, <a href="https://marcobonzanini.com/tag/luigi/" rel="tag">luigi</a>, <a href="https://marcobonzanini.com/tag/python-2/" rel="tag">python</a></span><span class="comments-link"><a href="https://marcobonzanini.com/2015/11/21/adding-slack-notifications-to-a-luigi-pipeline-in-python/#comments">4 Comments<span class="screen-reader-text"> on Adding Slack Notifications to a Luigi Pipeline in&nbsp;Python</span></a></span>			</footer><!-- .entry-footer -->
+
+</article><!-- #post-205 -->
+
+<article id="post-196" class="post-196 post type-post status-publish format-standard hentry category-big-data category-data-mining category-engineering category-python tag-big-data-2 tag-data-science tag-engineering-2 tag-luigi tag-python-2">
+	
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://marcobonzanini.com/2015/10/24/building-data-pipelines-with-python-and-luigi/" rel="bookmark">Building Data Pipelines with Python and&nbsp;Luigi</a></h2>	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p>As a data scientist, the emphasis of the day-to-day job is often more on the R&amp;D side rather than engineering. In the process of going from prototypes to production though, some of the early quick-and-dirty decisions turn out to be sub-optimal and require a decent amount of effort to be re-engineered. This usually slows down innovation, and generally speaking your project as a whole.</p>
+<p>This post will discuss some experience in building data pipelines, e.g. extraction, cleaning, integration, pre-processing of data, in general all the steps that are necessary to prepare your data for your data-driven product. In particular, the focus in on <em>data plumbing</em>, and how a workflow manager like Luigi can come to the rescue, without getting in your way. With a minimal effort, the transition from prototype to production can be smoother.</p>
+<p>You can find the code for the examples as <a href="https://gist.github.com/bonzanini/40774bf9348d35d9ea4f">GitHub Gist</a>.</p>
+<h2>Early Days of a Prototype</h2>
+<p>In the early days of a prototype, the data pipeline often looks like this:</p>
+<pre>$ python get_some_data.py
+$ python clean_some_data.py
+$ python join_other_data.py
+$ python do_stuff_with_data.py</pre>
+<p>This is quite common when the data project is in its exploratory stage: you know that you&#8217;ll need some pre-processing, you think it&#8217;s going to be a quick hack, so you don&#8217;t bother with some engineering best practices, then the number of scripts grows and your data pipeline will come back and bite you.</p>
+<p>This approach has the only advantage of being quick and hacky. On the downside, it&#8217;s tedious: every time you want to re-run the pipeline, you need to manually call the bunch of scripts in sequence. Moreover, if you&#8217;re sharing this prototype with a colleague, there is even more room for misinterpretation (&#8220;why can&#8217;t I do stuff with data?&#8221;&#8230; &#8220;did you clean it first?&#8221;, etc.)</p>
+<p>The obvious hacky solution seems to be: let&#8217;s put everything in one script. After some quick refactoring, the <tt>do_everything.py</tt> script can look like this:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+if __name__ == '__main__':
+    get_some_data()
+    clean_some_data()
+    join_other_data()
+    do_stuff_with_data()
+</pre>
+<p>This is fairly simple to run:</p>
+<pre>$ python do_everything.py</pre>
+<p>(Note: you could also put everything in a bash script, which calls the indiviaul bunch of scripts in sequence, but the shortcomings will be more or less the same)</p>
+<h2>Boilerplate Code</h2>
+<p>When moving towards a production-ready pipeline, there are a few more aspects to consider besides the run-everything code. In particular, error handling should be taken into account:</p>
+<pre class="brush: python; title: ; notranslate" title=""> 
+try:
+    get_some_data()
+except GetSomeDataError as e:
+    # handle this
+</pre>
+<p>But if we chain all the individual tasks together, we end up with a Christmas tree of try/except:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+try:
+    get_some_data()
+    try:
+        clean_some_data()
+        try:
+            # you see where this is going...
+        except EvenMoreErrors:
+            # ...
+    except CleanSomeDataError as e:
+        # handle CleanSomeDataError
+except GetSomeDataError as e:
+    # handle GetSomeDataError
+</pre>
+<p>Another important aspect to consider is how to resume a pipeline. For example, if the first few tasks are completed, but then an error occurs half-way through, how do we re-run the pipeline without re-executing the initial successful steps?</p>
+<pre class="brush: python; title: ; notranslate" title="">
+# check if the task was already successful
+if not i_got_the_data_already():
+    # if not, run it
+    try:
+        get_some_date()
+    except GetSomeDataError as e:
+        # handle the error
+</pre>
+<h2>Moving to Luigi</h2>
+<p><a href="https://github.com/spotify/luigi">Luigi</a> is a Python tool for workflow management. It has been developed at Spotify, to help building complex data pipelines of batch jobs. To install Luigi:</p>
+<pre>$ pip install luigi</pre>
+<p>Some of the useful features of Luigi include:</p>
+<ul>
+<li>Dependency management</li>
+<li>Checkpoints / Failure recovery</li>
+<li>CLI integration / parameterisation</li>
+<li>Dependency Graph visualisation</li>
+</ul>
+<p>There are two core concepts to understand how we can apply Luigi to our own data pipeline: Tasks and Targets. A task is a unit of work, designed by extending the class <tt>luigi.Task</tt> and overriding some basic methods. The output of a task is a target, which can be a file on the local filesystem, a file on Amazon&#8217;s S3, some piece of data in a database etc.</p>
+<p>Dependencies are defined in terms of inputs and outputs, i.e. if TaskB depends on TaskA, it means that the output of TaskA will be the input of TaskB.</p>
+<p>Let&#8217;s look at a couple of template tasks:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+# Filename: run_luigi.py
+import luigi
+
+class PrintNumbers(luigi.Task):
+
+    def requires(self):
+        return []
+
+    def output(self):
+        return luigi.LocalTarget(&quot;numbers_up_to_10.txt&quot;)
+
+    def run(self):
+        with self.output().open('w') as f:
+            for i in range(1, 11):
+                f.write(&quot;{}\n&quot;.format(i))
+
+class SquaredNumbers(luigi.Task):
+
+    def requires(self):
+        return [PrintNumbers()]
+
+    def output(self):
+        return luigi.LocalTarget(&quot;squares.txt&quot;)
+
+    def run(self):
+        with self.input()[0].open() as fin, self.output().open('w') as fout:
+            for line in fin:
+                n = int(line.strip())
+                out = n * n
+                fout.write(&quot;{}:{}\n&quot;.format(n, out))
+                
+if __name__ == '__main__':
+    luigi.run()
+
+</pre>
+<p>This code showcases two tasks: <tt>PrintNumbers</tt>, that writes the number from 1 to 10 into a file called <tt>numbers_up_to_10.txt</tt>, one number per line, and <tt>SquaredNumbers</tt>, that reads the such file and outputs a list of pairs number-square into <tt>squares.txt</tt>, also one pair per line.</p>
+<p>To run the tasks:</p>
+<pre>$ python run_luigi.py SquaredNumbers --local-scheduler</pre>
+<p>Luigi will take care of checking the dependencies between tasks, see that the input of <tt>SquaredNumbers</tt> is not there, so it will run the <tt>PrintNumbers</tt> task first, then carry on with the execution.</p>
+<p>The first argument we&#8217;re passing to Luigi is the name of the last task in the pipeline we want to run. The second argument simply tells Luigi to use a local scheduler (more on this later).</p>
+<p>You could also use the <tt>luigi</tt> command:</p>
+<pre>$ luigi -m run_luigi.py SquaredNumbers --local-scheduler</pre>
+<h2>Anatomy of a Task</h2>
+<p>To create a Luigi task we simply need to create a class whose parent is <tt>luigi.Task</tt>, and override some methods. In particular:</p>
+<ul>
+<li><tt>requires()</tt> should return the list of dependencies for the given task &#8212; in other words a list of tasks</li>
+<li><tt>output()</tt> should return the target for the task (e.g. a LocalTarget, a S3Target, etc.)</li>
+<li><tt>run()</tt> should contain the logic to execute</li>
+</ul>
+<p>Luigi will check the return values of <tt>requires()</tt> and <tt>output()</tt> and build the dependency graph accordingly.</p>
+<h2>Passing Parameters</h2>
+<p>Hard-coding filenames and config values is generally speaking an anti-pattern. Once you&#8217;ve understood the structure and the dynamics of your task, you should look into parameterising all the configuration aspects so that you can dynamically call the same script with different arguments. </p>
+<p>The class <tt>luigi.Parameter()</tt> is the place to look into. Each Luigi task can have a number of parameters. Let&#8217;s say for example that we want to modify the previous example to support a custom number. As the parameter we&#8217;re using with the <tt>range()</tt> function is an integer, we can use <tt>luigi.IntParameter</tt> rather than the default parameter class. This is how the modified tasks can look like:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+class PrintNumbers(luigi.Task):
+    n = luigi.IntParameter()
+
+    def requires(self):
+        return []
+
+    def output(self):
+        return luigi.LocalTarget(&quot;numbers_up_to_{}.txt&quot;.format(self.n))
+
+    def run(self):
+        with self.output().open('w') as f:
+            for i in range(1, self.n+1):
+                f.write(&quot;{}\n&quot;.format(i))
+
+class SquaredNumbers(luigi.Task):
+    n = luigi.IntParameter()
+
+    def requires(self):
+        return [PrintNumbers(n=self.n)]
+
+    def output(self):
+        return luigi.LocalTarget(&quot;squares_up_to_{}.txt&quot;.format(self.n))
+
+    def run(self):
+        with self.input()[0].open() as fin, self.output().open('w') as fout:
+            for line in fin:
+                n = int(line.strip())
+                out = n * n
+                fout.write(&quot;{}:{}\n&quot;.format(n, out))
+</pre>
+<p>To call the <tt>SquaredNumbers</tt> tasks up to, say, 20:</p>
+<pre>$ python run_luigi.py SquaredNumbers --local-scheduler --n 20</pre>
+<p>Parameters can also have default values, e.g.</p>
+<pre class="brush: python; title: ; notranslate" title="">
+n = luigi.IntParameter(default=10)
+</pre>
+<p>so in this way, if you don&#8217;t specify the <tt>--n</tt> argument, it will default to 10.</p>
+<p><a href="https://gist.github.com/bonzanini/40774bf9348d35d9ea4f">Sample code as GitHub Gist</a></p>
+<h2>Local vs Global Scheduler</h2>
+<p>So far, we&#8217;ve used the <tt>--local-scheduler</tt> option to run Luigi tasks with a local scheduler. This is useful for development, but in a production environment we should make use of the centralised scheduler (see the docs on the <a href="http://luigi.readthedocs.org/en/latest/central_scheduler.html">scheduler</a>).</p>
+<p>This has a few advantages: </p>
+<ul>
+<li>avoid running two instances of the same task simultaneously</li>
+<li>nice web-based visualisation</li>
+</ul>
+<p>You can run the Luigi scheduler daemon in the foreground with:</p>
+<pre>$ luigid</pre>
+<p>or in the background with:</p>
+<pre>$ luigid --background</pre>
+<p>It will default to port 8082, so you can point your browser to <a href="http://localhost:8082">http://localhost:8082</a> to access the visualisation.</p>
+<p>With the global Luigi scheduler running, we can re-run the code without the option for the local scheduler:</p>
+<pre>$ python run_luigi.py SquaredNumbers --n [BIG_NUMBER]</pre>
+<p>As the sample code will run in milliseconds, if you want to have a chance to switch to the browser and see the dependency graph while the tasks are still running, you should probably use a big number like 10,000,000 or more for the <tt>--n</tt> option.</p>
+<p>This is a cropped screenshot of the dependency graph:</p>
+<p><a href="https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png"><img data-attachment-id="197" data-permalink="https://marcobonzanini.com/2015/10/24/building-data-pipelines-with-python-and-luigi/dependency-graph-screenshot/" data-orig-file="https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png" data-orig-size="1472,420" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="dependency-graph-screenshot" data-image-description="" data-image-caption="" data-medium-file="https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png?w=300" data-large-file="https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png?w=660" src="https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png?w=300&#038;h=86" alt="dependency-graph-screenshot" width="300" height="86" class="alignnone size-medium wp-image-197" srcset="https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png?w=300 300w, https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png?w=600 600w, https://marcobonzanini.files.wordpress.com/2015/10/dependency-graph-screenshot.png?w=150 150w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<h2>Summary</h2>
+<p>We have described the definition of data pipelines using Luigi, a workflow manager written in Python. Luigi provides a nice abstraction to define your data pipeline in terms of tasks and targets, and it will take care of the dependencies for you.</p>
+<p>In terms of code re-use, and with the mindset of going from prototype to production, I&#8217;ve found very helpful to define the business logic of the tasks in separate <a href="https://marcobonzanini.com/2015/07/01/how-to-develop-and-distribute-python-packages/">Python packages</a> (i.e. with a setup.py file). In this way, from your Luigi script you can simply <tt>import your_package</tt> and call it from there.</p>
+<p>A task can produce multiple files as output, but if that&#8217;s your case, you should probably verify if the task can be broken down into smaller units (i.e. multiple tasks). Do all these outputs logically belong together? Do you have dependencies between them? If you can&#8217;t break the task down, I&#8217;ve found it simpler/useful just to define the <tt>output()</tt> as a log file with the names and the timestamps of all the individual files created by the task itself. The log file name can be formatted as <tt>TaskName_timestamp_param1value_param2value_etc</tt>.</p>
+<p>Using a workflow manager like Luigi is in general helpful because it handles dependencies, it reduces the amount of boilerplate code that is necessary for parameters and error checking, it manages failure recovery and overall it forces us to follow a clear pattern when developing the data pipeline.</p>
+<p>It&#8217;s also important to consider its limitations:</p>
+<ul>
+<li>It was built for batch jobs, it&#8217;s probably not useful for near real-time processing</li>
+<li>It doesn&#8217;t trigger the execution for you, you still need to run the data pipeline (e.g. via a cronjob)</li>
+</ul>
+<p><a>@MarcoBonzanini</a></p>
+	</div><!-- .entry-content -->
+
+	
+	<footer class="entry-footer">
+		<span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="https://marcobonzanini.com/2015/10/24/building-data-pipelines-with-python-and-luigi/" rel="bookmark"><time class="entry-date published" datetime="2015-10-24T15:00:15+00:00">October 24, 2015</time><time class="updated" datetime="2015-12-02T10:23:29+00:00">December 2, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://marcobonzanini.com/category/big-data/" rel="category tag">Big Data</a>, <a href="https://marcobonzanini.com/category/data-mining/" rel="category tag">Data Mining</a>, <a href="https://marcobonzanini.com/category/engineering/" rel="category tag">Engineering</a>, <a href="https://marcobonzanini.com/category/python/" rel="category tag">Python</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="https://marcobonzanini.com/tag/big-data-2/" rel="tag">big data</a>, <a href="https://marcobonzanini.com/tag/data-science/" rel="tag">data science</a>, <a href="https://marcobonzanini.com/tag/engineering-2/" rel="tag">engineering</a>, <a href="https://marcobonzanini.com/tag/luigi/" rel="tag">luigi</a>, <a href="https://marcobonzanini.com/tag/python-2/" rel="tag">python</a></span><span class="comments-link"><a href="https://marcobonzanini.com/2015/10/24/building-data-pipelines-with-python-and-luigi/#comments">21 Comments<span class="screen-reader-text"> on Building Data Pipelines with Python and&nbsp;Luigi</span></a></span>			</footer><!-- .entry-footer -->
+
+</article><!-- #post-196 -->
+
+<article id="post-166" class="post-166 post type-post status-publish format-standard hentry category-big-data category-python category-spark tag-big-data-2 tag-python-2 tag-spark-2">
+	
+	<header class="entry-header">
+		<h2 class="entry-title"><a href="https://marcobonzanini.com/2015/07/09/getting-started-with-apache-spark-and-python-3/" rel="bookmark">Getting Started with Apache Spark and Python&nbsp;3</a></h2>	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<p><a href="https://spark.apache.org/">Apache Spark</a> is a cluster computing framework, currently one of the most actively developed in the open-source Big Data arena. It aims at being a general engine for large-scale data processing, supporting a number of platforms for cluster management (e.g. YARN or Mesos as well as Spark native) and a variety of distributed storage systems (e.g. HDFS or Amazon S3). </p>
+<p>More interestingly, at least from a developer&#8217;s perspective, it supports a number of programming languages. Since the latest version 1.4 (June 2015), Spark supports R and Python 3 (to complement the previously available support for Java, Scala and Python 2).</p>
+<p>This article is a brief introduction on how to use Spark on Python 3.</p>
+<h2>Quick Start</h2>
+<p>After downloading a binary version of Spark 1.4, we can extract it in a custom folder, e.g. <tt>~/apps/spark</tt>, which we&#8217;ll call $SPARK_HOME:</p>
+<pre>export SPARK_HOME=~/apps/spark</pre>
+<p>This folder contains several Spark commands (in <tt>$SPARK_HOME/bin</tt>) as well as examples of code (in <tt>$SPARK_HOME/examples/src/main/YOUR-LANGUAGE</tt>).</p>
+<p>We can run Spark with Python in two ways: using the interactive shell, or submitting a standalone application.</p>
+<p>Let&#8217;s start with the interactive shell, by running this command:</p>
+<pre>$SPARK_HOME/bin/pyspark</pre>
+<p>You will get several messages on the screen while the shell is loading, and at the end you should see the Spark banner:</p>
+<pre>Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /__ / .__/\_,_/_/ /_/\_\   version 1.4.0
+      /_/
+
+Using Python version 2.7.5 (default, Mar  9 2014 22:15:05)
+SparkContext available as sc, HiveContext available as sqlContext.
+&gt;&gt;&gt;</pre>
+<p>The <tt>&gt;&gt;&gt;</tt> prompt is the usual Python prompt, as effectively we are using a Python interactive shell.</p>
+<p><tt>SparkContext</tt> and <tt>HiveContext</tt> are Spark concepts that we&#8217;ll briefly explain below. The interactive shell is telling us that these two contexts have been initialised and are available as <tt>sc</tt> and <tt>sqlContext</tt> in this session. The shell is also telling us that we&#8217;re using Python 2.7!?</p>
+<p><em>But I want to use Python 3!</em></p>
+<p>Long story short, Python 2 is still the default option in Spark, which you can see if you open the <tt>pyspark</tt> script with an editor (it&#8217;s a shell script). You can simply override this behaviour by setting an environment variable:</p>
+<pre>export PYSPARK_PYTHON=python3</pre>
+<p>Once you re-run the interactive shell, the Spark banner should be updated to reflect your version of Python 3. </p>
+<h2>Some Basic Spark Concepts</h2>
+<p>Two Spark concepts have already been mentioned above:</p>
+<ul>
+<li><tt>SparkContext</tt>: it&#8217;s an object that represents a connection to a computing cluster &#8211; an application will access Spark through this context</li>
+<li><tt>HiveContext</tt>: it&#8217;s an instance of the Spark SQL engine, that integrates data stored in Hive (not used in this article)</li>
+</ul>
+<p>Another core concept in Spark is the Resilient Distributed Dataset (RDD), an immutable distributed collection of objects. Each RDD is split into partitions, which might be processed on different nodes of a cluster.</p>
+<p>RDDs can be loaded from external sources, e.g. from text files, or can be transformed into new RDDs. </p>
+<p>There are two types of operation that can be performed over a RDD:</p>
+<ul>
+<li>a <em>transformation</em> will leave the original RDD intact and create a new one (RDD are immutable); an example of transformation is the use of a filter</li>
+<li>an <em>action</em> will compute a result based on the RDD, e.g. counting the number of lines in a RDD
+</ul>
+<h2>Running an Example Application</h2>
+<p>Running the interactive shell can be useful for interactive analysis, but sometimes you need to launch a batch job, i.e. you need to submit a stand-alone application.</p>
+<p>Consider the following code and save it as <tt>line_count.py</tt>:</p>
+<pre class="brush: python; title: ; notranslate" title="">
+from pyspark import SparkContext
+
+import sys
+
+if __name__ == '__main__':
+
+    fname = sys.argv[1]
+    search1 = sys.argv[2].lower()
+    search2 = sys.argv[3].lower()
+
+    sc = SparkContext(&quot;local&quot;, appName=&quot;Line Count&quot;)
+    data = sc.textFile(fname)
+
+    # Transformations
+    filtered_data1 = data.filter(lambda s: search1 in s.lower())
+    filtered_data2 = data.filter(lambda s: search2 in s.lower())
+    # Actions
+    num1 = filtered_data1.count()
+    num2 = filtered_data2.count()
+
+    print('Lines with &quot;%s&quot;: %i, lines with &quot;%s&quot;: %i' % (search1, num1, search2, num2))
+</pre>
+<p>The application will take three parameters from the command line (via <tt>sys.argv</tt>), namely a file name and two search terms.</p>
+<p>The <tt>sc</tt> variable contains the SparkContext, initialised as local context (we&#8217;re not using a cluster).</p>
+<p>The <tt>data</tt> variable is the RDD, loaded from an external resource (the aforementioned file).</p>
+<p>What follows the data import is a series of transformations and actions. The basic idea is to simply count how many lines contain the given search terms.</p>
+<p>For this example, I&#8217;m using <a href="https://marcobonzanini.com/2015/03/23/mining-twitter-data-with-python-part-4-rugby-and-term-co-occurrences/">a data-set of tweets</a> downloaded for a previous article, stored in <tt>data.json</tt> one tweet per line.</p>
+<p>I can now launch (submit) the application with:</p>
+<pre>$SPARK_HOME/bin/spark-submit line_count.py data.json \#ita \#eng</pre>
+<p>Within a lot of debugging information, the application will print out the final count:</p>
+<pre>Lines with "#ita": 1339, lines with "#eng": 2278</pre>
+<p>Notice the use of the backslash from the command-line, because we need to escape the <tt>#</tt> symbol: effectively the search terms are <tt>#ita</tt> and <tt>#eng</tt>.</p>
+<p>Also notice that we don&#8217;t have information about repeated occurrences of the search terms, nor about partial matches (e.g. &#8220;#eng&#8221; will also match &#8220;#england&#8221;, etc.): this example just showcases the use of transformations and actions.</p>
+<h2>Summary</h2>
+<p>Spark now supports Python 3 :)</p>
+<p><a href="http://www.twitter.com/marcobonzanini">@MarcoBonzanini</a></p>
+	</div><!-- .entry-content -->
+
+	
+	<footer class="entry-footer">
+		<span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="https://marcobonzanini.com/2015/07/09/getting-started-with-apache-spark-and-python-3/" rel="bookmark"><time class="entry-date published updated" datetime="2015-07-09T18:00:28+00:00">July 9, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://marcobonzanini.com/category/big-data/" rel="category tag">Big Data</a>, <a href="https://marcobonzanini.com/category/python/" rel="category tag">Python</a>, <a href="https://marcobonzanini.com/category/spark/" rel="category tag">Spark</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="https://marcobonzanini.com/tag/big-data-2/" rel="tag">big data</a>, <a href="https://marcobonzanini.com/tag/python-2/" rel="tag">python</a>, <a href="https://marcobonzanini.com/tag/spark-2/" rel="tag">spark</a></span><span class="comments-link"><a href="https://marcobonzanini.com/2015/07/09/getting-started-with-apache-spark-and-python-3/#comments">4 Comments<span class="screen-reader-text"> on Getting Started with Apache Spark and Python&nbsp;3</span></a></span>			</footer><!-- .entry-footer -->
+
+</article><!-- #post-166 -->
+
+		</main><!-- .site-main -->
+	</section><!-- .content-area -->
+
+
+	</div><!-- .site-content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+									<a href="https://wordpress.com/?ref=footer_blog" rel="nofollow">Blog at WordPress.com.</a>
+		</div><!-- .site-info -->
+	</footer><!-- .site-footer -->
+
+</div><!-- .site -->
+
+<!--  -->
+<script src="//0.gravatar.com/js/hovercards/hovercards.min.js?ver=202406131f6b765e798866d728f95661b78bbf269c86482ffff0fa8c08e18a1a65cc89" id="grofiles-cards-js"></script>
+<script id="wpgroho-js-extra">
+var WPGroHo = {"my_hash":""};
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='https://s2.wp.com/wp-content/mu-plugins/gravatar-hovercards/wpgroho.js?m=1610363240i'></script>
+
+	<script>
+		// Initialize and attach hovercards to all gravatars
+		( function() {
+			function init() {
+				if ( typeof Gravatar === 'undefined' ) {
+					return;
+				}
+
+				if ( typeof Gravatar.init !== 'function' ) {
+					return;
+				}
+
+				Gravatar.profile_cb = function ( hash, id ) {
+					WPGroHo.syncProfileData( hash, id );
+				};
+
+				Gravatar.my_hash = WPGroHo.my_hash;
+				Gravatar.init(
+					'body',
+					'#wp-admin-bar-my-account',
+					{
+						i18n: {
+							'Edit your profile': 'Edit your profile',
+							'View profile': 'View profile',
+							'Sorry, we are unable to load this Gravatar profile.': 'Sorry, we are unable to load this Gravatar profile.',
+							'Sorry, we are unable to load this Gravatar profile. Please check your internet connection.': 'Sorry, we are unable to load this Gravatar profile. Please check your internet connection.',
+						},
+					}
+				);
+			}
+
+			if ( document.readyState !== 'loading' ) {
+				init();
+			} else {
+				document.addEventListener( 'DOMContentLoaded', init );
+			}
+		} )();
+	</script>
+
+		<div style="display:none">
+	</div>
+	<div id="actionbar" style="display: none;"
+			class="actnbr-pub-twentyfifteen actnbr-has-follow">
+		<ul>
+								<li class="actnbr-btn actnbr-hidden">
+								<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+							<div class="actnbr-popover tip tip-top-left actnbr-notice" id="follow-bubble">
+							<div class="tip-arrow"></div>
+							<div class="tip-inner actnbr-follow-bubble">
+															<ul>
+											<li class="actnbr-sitename">
+			<a href="https://marcobonzanini.com">
+				<img alt='' src='https://s2.wp.com/i/logo/wpcom-gray-white.png' srcset='https://s2.wp.com/i/logo/wpcom-gray-white.png 1x' class='avatar avatar-50' height='50' width='50' />				Marco Bonzanini			</a>
+		</li>
+										<div class="actnbr-message no-display"></div>
+									<form method="post" action="https://subscribe.wordpress.com" accept-charset="utf-8" style="display: none;">
+																						<div class="actnbr-follow-count">Join 225 other subscribers</div>
+																					<div>
+										<input type="email" name="email" placeholder="Enter your email address" class="actnbr-email-field" aria-label="Enter your email address" />
+										</div>
+										<input type="hidden" name="action" value="subscribe" />
+										<input type="hidden" name="blog_id" value="82018920" />
+										<input type="hidden" name="source" value="https://marcobonzanini.com/category/big-data/" />
+										<input type="hidden" name="sub-type" value="actionbar-follow" />
+										<input type="hidden" id="_wpnonce" name="_wpnonce" value="959a3d37cb" />										<div class="actnbr-button-wrap">
+											<button type="submit" value="Sign me up">
+												Sign me up											</button>
+										</div>
+									</form>
+									<li class="actnbr-login-nudge">
+										<div>
+											Already have a WordPress.com account? <a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fmarcobonzanini.com%252F2016%252F08%252F02%252Fmastering-social-media-mining-with-python%252F">Log in now.</a>										</div>
+									</li>
+								</ul>
+															</div>
+						</div>
+					</li>
+							<li class="actnbr-ellipsis actnbr-hidden">
+				<svg class="gridicon gridicons-ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M7 12c0 1.104-.896 2-2 2s-2-.896-2-2 .896-2 2-2 2 .896 2 2zm12-2c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2zm-7 0c-1.104 0-2 .896-2 2s.896 2 2 2 2-.896 2-2-.896-2-2-2z"/></g></svg>				<div class="actnbr-popover tip tip-top-left actnbr-more">
+					<div class="tip-arrow"></div>
+					<div class="tip-inner">
+						<ul>
+									<li class="actnbr-sitename">
+			<a href="https://marcobonzanini.com">
+				<img alt='' src='https://s2.wp.com/i/logo/wpcom-gray-white.png' srcset='https://s2.wp.com/i/logo/wpcom-gray-white.png 1x' class='avatar avatar-50' height='50' width='50' />				Marco Bonzanini			</a>
+		</li>
+								<li class="actnbr-folded-customize">
+								<a href="https://marcobonzanini.wordpress.com/wp-admin/customize.php?url=https%3A%2F%2Fmarcobonzanini.wordpress.com%2Fcategory%2Fbig-data%2F">
+									<svg class="gridicon gridicons-customize" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M2 6c0-1.505.78-3.08 2-4 0 .845.69 2 2 2 1.657 0 3 1.343 3 3 0 .386-.08.752-.212 1.09.74.594 1.476 1.19 2.19 1.81L8.9 11.98c-.62-.716-1.214-1.454-1.807-2.192C6.753 9.92 6.387 10 6 10c-2.21 0-4-1.79-4-4zm12.152 6.848l1.34-1.34c.607.304 1.283.492 2.008.492 2.485 0 4.5-2.015 4.5-4.5 0-.725-.188-1.4-.493-2.007L18 9l-2-2 3.507-3.507C18.9 3.188 18.225 3 17.5 3 15.015 3 13 5.015 13 7.5c0 .725.188 1.4.493 2.007L3 20l2 2 6.848-6.848c1.885 1.928 3.874 3.753 5.977 5.45l1.425 1.148 1.5-1.5-1.15-1.425c-1.695-2.103-3.52-4.092-5.448-5.977z"/></g></svg>									<span>Customize</span>
+								</a>
+							</li>
+																<li class="actnbr-folded-follow">
+												<a class="actnbr-action actnbr-actn-follow " href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path clip-rule="evenodd" d="m4 4.5h12v6.5h1.5v-6.5-1.5h-1.5-12-1.5v1.5 10.5c0 1.1046.89543 2 2 2h7v-1.5h-7c-.27614 0-.5-.2239-.5-.5zm10.5 2h-9v1.5h9zm-5 3h-4v1.5h4zm3.5 1.5h-1v1h1zm-1-1.5h-1.5v1.5 1 1.5h1.5 1 1.5v-1.5-1-1.5h-1.5zm-2.5 2.5h-4v1.5h4zm6.5 1.25h1.5v2.25h2.25v1.5h-2.25v2.25h-1.5v-2.25h-2.25v-1.5h2.25z"  fill-rule="evenodd"></path></svg>
+			<span>Subscribe</span>
+		</a>
+		<a class="actnbr-action actnbr-actn-following  no-display" href="">
+			<svg class="gridicon" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M16 4.5H4V15C4 15.2761 4.22386 15.5 4.5 15.5H11.5V17H4.5C3.39543 17 2.5 16.1046 2.5 15V4.5V3H4H16H17.5V4.5V12.5H16V4.5ZM5.5 6.5H14.5V8H5.5V6.5ZM5.5 9.5H9.5V11H5.5V9.5ZM12 11H13V12H12V11ZM10.5 9.5H12H13H14.5V11V12V13.5H13H12H10.5V12V11V9.5ZM5.5 12H9.5V13.5H5.5V12Z" fill="#008A20"></path><path class="following-icon-tick" d="M13.5 16L15.5 18L19 14.5" stroke="#008A20" stroke-width="1.5"></path></svg>
+			<span>Subscribed</span>
+		</a>
+										</li>
+																	<li class="actnbr-signup"><a href="https://wordpress.com/start/">Sign up</a></li>
+									<li class="actnbr-login"><a href="https://wordpress.com/log-in?redirect_to=https%3A%2F%2Fr-login.wordpress.com%2Fremote-login.php%3Faction%3Dlink%26back%3Dhttps%253A%252F%252Fmarcobonzanini.com%252F2016%252F08%252F02%252Fmastering-social-media-mining-with-python%252F">Log in</a></li>
+																	<li class="flb-report">
+										<a href="http://en.wordpress.com/abuse/?report_url=https://marcobonzanini.com" target="_blank">
+											Report this content										</a>
+									</li>
+																	<li class="actnbr-reader">
+										<a href="https://wordpress.com/read/feeds/33453096">
+											View site in Reader										</a>
+									</li>
+																	<li class="actnbr-subs">
+										<a href="https://subscribe.wordpress.com/">Manage subscriptions</a>
+									</li>
+																		<li class="actnbr-fold"><a href="">Collapse this bar</a></li>
+															</ul>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	
+<script>
+window.addEventListener( "load", function( event ) {
+	var link = document.createElement( "link" );
+	link.href = "https://s0.wp.com/wp-content/mu-plugins/actionbar/actionbar.css?v=20240115";
+	link.type = "text/css";
+	link.rel = "stylesheet";
+	document.head.appendChild( link );
+
+	var script = document.createElement( "script" );
+	script.src = "https://s0.wp.com/wp-content/mu-plugins/actionbar/actionbar.js?v=20231122";
+	script.defer = true;
+	document.body.appendChild( script );
+} );
+</script>
+
+	<script src="https://platform.twitter.com/widgets.js?ver=20111117" id="twitter-widgets-js"></script>
+		<div id="jp-carousel-loading-overlay">
+			<div id="jp-carousel-loading-wrapper">
+				<span id="jp-carousel-library-loading">&nbsp;</span>
+			</div>
+		</div>
+		<div class="jp-carousel-overlay" style="display: none;">
+
+		<div class="jp-carousel-container">
+			<!-- The Carousel Swiper -->
+			<div
+				class="jp-carousel-wrap swiper-container jp-carousel-swiper-container jp-carousel-transitions"
+				itemscope
+				itemtype="https://schema.org/ImageGallery">
+				<div class="jp-carousel swiper-wrapper"></div>
+				<div class="jp-swiper-button-prev swiper-button-prev">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskPrev" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="9" height="12">
+							<path d="M16.2072 16.59L11.6496 12L16.2072 7.41L14.8041 6L8.8335 12L14.8041 18L16.2072 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskPrev)">
+							<rect x="0.579102" width="23.8823" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+				<div class="jp-swiper-button-next swiper-button-next">
+					<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<mask id="maskNext" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="6" width="8" height="12">
+							<path d="M8.59814 16.59L13.1557 12L8.59814 7.41L10.0012 6L15.9718 12L10.0012 18L8.59814 16.59Z" fill="white"/>
+						</mask>
+						<g mask="url(#maskNext)">
+							<rect x="0.34375" width="23.8822" height="24" fill="#FFFFFF"/>
+						</g>
+					</svg>
+				</div>
+			</div>
+			<!-- The main close buton -->
+			<div class="jp-carousel-close-hint">
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<mask id="maskClose" mask-type="alpha" maskUnits="userSpaceOnUse" x="5" y="5" width="15" height="14">
+						<path d="M19.3166 6.41L17.9135 5L12.3509 10.59L6.78834 5L5.38525 6.41L10.9478 12L5.38525 17.59L6.78834 19L12.3509 13.41L17.9135 19L19.3166 17.59L13.754 12L19.3166 6.41Z" fill="white"/>
+					</mask>
+					<g mask="url(#maskClose)">
+						<rect x="0.409668" width="23.8823" height="24" fill="#FFFFFF"/>
+					</g>
+				</svg>
+			</div>
+			<!-- Image info, comments and meta -->
+			<div class="jp-carousel-info">
+				<div class="jp-carousel-info-footer">
+					<div class="jp-carousel-pagination-container">
+						<div class="jp-swiper-pagination swiper-pagination"></div>
+						<div class="jp-carousel-pagination"></div>
+					</div>
+					<div class="jp-carousel-photo-title-container">
+						<h2 class="jp-carousel-photo-caption"></h2>
+					</div>
+					<div class="jp-carousel-photo-icons-container">
+						<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-info" aria-label="Toggle photo metadata visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskInfo" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M12.7537 2C7.26076 2 2.80273 6.48 2.80273 12C2.80273 17.52 7.26076 22 12.7537 22C18.2466 22 22.7046 17.52 22.7046 12C22.7046 6.48 18.2466 2 12.7537 2ZM11.7586 7V9H13.7488V7H11.7586ZM11.7586 11V17H13.7488V11H11.7586ZM4.79292 12C4.79292 16.41 8.36531 20 12.7537 20C17.142 20 20.7144 16.41 20.7144 12C20.7144 7.59 17.142 4 12.7537 4C8.36531 4 4.79292 7.59 4.79292 12Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskInfo)">
+										<rect x="0.8125" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+							</span>
+						</a>
+												<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-comments" aria-label="Toggle photo comments visibility">
+							<span class="jp-carousel-icon">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="maskComments" mask-type="alpha" maskUnits="userSpaceOnUse" x="2" y="2" width="21" height="20">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M4.3271 2H20.2486C21.3432 2 22.2388 2.9 22.2388 4V16C22.2388 17.1 21.3432 18 20.2486 18H6.31729L2.33691 22V4C2.33691 2.9 3.2325 2 4.3271 2ZM6.31729 16H20.2486V4H4.3271V18L6.31729 16Z" fill="white"/>
+									</mask>
+									<g mask="url(#maskComments)">
+										<rect x="0.34668" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+
+								<span class="jp-carousel-has-comments-indicator" aria-label="This image has comments."></span>
+							</span>
+						</a>
+											</div>
+				</div>
+				<div class="jp-carousel-info-extra">
+					<div class="jp-carousel-info-content-wrapper">
+						<div class="jp-carousel-photo-title-container">
+							<h2 class="jp-carousel-photo-title"></h2>
+						</div>
+						<div class="jp-carousel-comments-wrapper">
+															<div id="jp-carousel-comments-loading">
+									<span>Loading Comments...</span>
+								</div>
+								<div class="jp-carousel-comments"></div>
+								<div id="jp-carousel-comment-form-container">
+									<span id="jp-carousel-comment-form-spinner">&nbsp;</span>
+									<div id="jp-carousel-comment-post-results"></div>
+																														<form id="jp-carousel-comment-form">
+												<label for="jp-carousel-comment-form-comment-field" class="screen-reader-text">Write a Comment...</label>
+												<textarea
+													name="comment"
+													class="jp-carousel-comment-form-field jp-carousel-comment-form-textarea"
+													id="jp-carousel-comment-form-comment-field"
+													placeholder="Write a Comment..."
+												></textarea>
+												<div id="jp-carousel-comment-form-submit-and-info-wrapper">
+													<div id="jp-carousel-comment-form-commenting-as">
+																													<fieldset>
+																<label for="jp-carousel-comment-form-email-field">Email (Required)</label>
+																<input type="text" name="email" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-email-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-author-field">Name (Required)</label>
+																<input type="text" name="author" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-author-field" />
+															</fieldset>
+															<fieldset>
+																<label for="jp-carousel-comment-form-url-field">Website</label>
+																<input type="text" name="url" class="jp-carousel-comment-form-field jp-carousel-comment-form-text-field" id="jp-carousel-comment-form-url-field" />
+															</fieldset>
+																											</div>
+													<input
+														type="submit"
+														name="submit"
+														class="jp-carousel-comment-form-button"
+														id="jp-carousel-comment-form-button-submit"
+														value="Post Comment" />
+												</div>
+											</form>
+																											</div>
+													</div>
+						<div class="jp-carousel-image-meta">
+							<div class="jp-carousel-title-and-caption">
+								<div class="jp-carousel-photo-info">
+									<h3 class="jp-carousel-caption" itemprop="caption description"></h3>
+								</div>
+
+								<div class="jp-carousel-photo-description"></div>
+							</div>
+							<ul class="jp-carousel-image-exif" style="display: none;"></ul>
+							<a class="jp-carousel-image-download" href="#" target="_blank" style="display: none;">
+								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
+										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.84615 5V19H19.7775V12H21.7677V19C21.7677 20.1 20.8721 21 19.7775 21H5.84615C4.74159 21 3.85596 20.1 3.85596 19V5C3.85596 3.9 4.74159 3 5.84615 3H12.8118V5H5.84615ZM14.802 5V3H21.7677V10H19.7775V6.41L9.99569 16.24L8.59261 14.83L18.3744 5H14.802Z" fill="white"/>
+									</mask>
+									<g mask="url(#mask0)">
+										<rect x="0.870605" width="23.8823" height="24" fill="#FFFFFF"/>
+									</g>
+								</svg>
+								<span class="jp-carousel-download-text"></span>
+							</a>
+							<div class="jp-carousel-image-map" style="display: none;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		</div>
+		<script crossorigin='anonymous' type='text/javascript'  src='https://s1.wp.com/_static/??-eJzTLy/QTc7PK0nNK9EvyClNz8wr1i+uzCtJrMjITM/IAeKS1CJMEWP94uSizIISoOIM5/yiVL2sYh19yo1yKiotzgioLMnIzwOaaJ9ra2hmaGpibmZpbJQFAFtgQQs='></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "https://s1.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.head.appendChild( corecss );
+		var themecssurl = "https://s2.wp.com/wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?m=1363304414i&amp;ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		document.head.appendChild( themecss );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+
+	// Infinite scroll support
+	document.addEventListener( 'is.post-load', function () {
+		SyntaxHighlighter.highlight();
+	} );
+</script>
+<link crossorigin='anonymous' rel='stylesheet' id='all-css-0-2' href='https://s0.wp.com/_static/??-eJyljEsKgDAMBS9kDUUquhDPom0Qaz/BNHh9KdgTuBl4w2PgIWVzKpgKRFEU5DgTg8dCm72+DTHnCicBGex2Z2EMwM9JeKtdkgvYW+YOftTaqYkaXOOix8noQU+z8S9MR0BZ&cssminify=yes' type='text/css' media='all' />
+<script id="twentyfifteen-script-js-extra">
+var screenReaderText = {"expand":"<span class=\"screen-reader-text\">expand child menu<\/span>","collapse":"<span class=\"screen-reader-text\">collapse child menu<\/span>"};
+</script>
+<script id="jetpack-carousel-js-extra">
+var jetpackSwiperLibraryPath = {"url":"https:\/\/s2.wp.com\/wp-content\/mu-plugins\/jetpack-plugin\/moon\/_inc\/build\/carousel\/swiper-bundle.min.js"};
+var jetpackCarouselStrings = {"widths":[370,700,1000,1200,1400,2000],"is_logged_in":"","lang":"en","ajaxurl":"https:\/\/marcobonzanini.com\/wp-admin\/admin-ajax.php","nonce":"9b66edfb4b","display_exif":"1","display_comments":"1","single_image_gallery":"1","single_image_gallery_media_file":"","background_color":"black","comment":"Comment","post_comment":"Post Comment","write_comment":"Write a Comment...","loading_comments":"Loading Comments...","download_original":"View full size <span class=\"photo-size\">{0}<span class=\"photo-size-times\">\u00d7<\/span>{1}<\/span>","no_comment_text":"Please be sure to submit some text with your comment.","no_comment_email":"Please provide an email address to comment.","no_comment_author":"Please provide your name to comment.","comment_post_error":"Sorry, but there was an error posting your comment. Please try again later.","comment_approved":"Your comment was approved.","comment_unapproved":"Your comment is in moderation.","camera":"Camera","aperture":"Aperture","shutter_speed":"Shutter Speed","focal_length":"Focal Length","copyright":"Copyright","comment_registration":"0","require_name_email":"1","login_url":"https:\/\/marcobonzanini.wordpress.com\/wp-login.php?redirect_to=https%3A%2F%2Fmarcobonzanini.com%2F2016%2F08%2F02%2Fmastering-social-media-mining-with-python%2F","blog_id":"82018920","meta_data":["camera","aperture","shutter_speed","focal_length","copyright"],"stats_query_args":"blog=82018920&v=wpcom&tz=0&user_id=0&subd=marcobonzanini","is_public":"1"};
+</script>
+<script crossorigin='anonymous' type='text/javascript'  src='https://s0.wp.com/_static/??-eJyVjcEOgjAQRH/IskgwxIPxUwzUrW5pt43bDfr3EiMeOBg9zuS9GZiysYkLcoFyxYgCWQco01w8HLmCyOAFZKRsAvFoXLIqxtG98rKBH3WnbAslln+kKdsU10JUk4NeiAU8ltzb8Z0hpsRwIrYwKIUz2P6WVDB8uKWoIvGX2QUzr/9VnL1jPGy7utk3bber/RMXInjC'></script>
+
+	<script type="text/javascript">
+		(function () {
+			var wpcom_reblog = {
+				source: 'toolbar',
+
+				toggle_reblog_box_flair: function (obj_id, post_id) {
+
+					// Go to site selector. This will redirect to their blog if they only have one.
+					const postEndpoint = `https://wordpress.com/post`;
+
+					// Ideally we would use the permalink here, but fortunately this will be replaced with the 
+					// post permalink in the editor.
+					const originalURL = `${ document.location.href }?page_id=${ post_id }`; 
+					
+					const url =
+						postEndpoint +
+						'?url=' +
+						encodeURIComponent( originalURL ) +
+						'&is_post_share=true' +
+						'&v=5';
+
+					const redirect = function () {
+						if (
+							! window.open( url, '_blank' )
+						) {
+							location.href = url;
+						}
+					};
+
+					if ( /Firefox/.test( navigator.userAgent ) ) {
+						setTimeout( redirect, 0 );
+					} else {
+						redirect();
+					}
+				},
+			};
+
+			window.wpcom_reblog = wpcom_reblog;
+		})();
+	</script>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script><script src="//stats.wp.com/w.js?67" defer></script> <script type="text/javascript">
+_tkq = window._tkq || [];
+_stq = window._stq || [];
+_tkq.push(['storeContext', {'blog_id':'82018920','blog_tz':'0','user_lang':'en','blog_lang':'en','user_id':'0'}]);
+_stq.push(['view', {'blog':'82018920','v':'wpcom','tz':'0','user_id':'0','subd':'marcobonzanini'}]);
+_stq.push(['extra', {'crypt':'UE40eW5QN0p8M2Y/RE1mNzc2NTVTamdsRWFxcEV3XUtMXVR5aWlmMVNIcUxBaFstUWRrZVpWQ2tORExSfEpUVm05SlpEZzZWOEtlbW5nZHV0dkhDNjhwP35JbkdHLyZqSUh8WkZWJWQ9a29oM1s5NFJicTQmW0xCQ0dbbj1+SytkLnUxK1p3bVBmbDk9S0tIaGlKdnRGOVdyeXlKRkpKSkhSa0IucS4wNk56V1VIczRnWSVVaHRiLVJ+eVZ+SkF0NmJVPS9KUzdYVXg1MWtYXUhwd11UamFHK2J6NSY2TDA5ekJueWI9YVIxTGM3dDI1TkFXOTVvYjRSTnBiU1JyajJZZzVDazZ2Q1JEYVtpSG9x'}]);
+_stq.push([ 'clickTrackerInit', '82018920', '0' ]);
+</script>
+<noscript><img src="https://pixel.wp.com/b.gif?v=noscript" style="height:1px;width:1px;overflow:hidden;position:absolute;bottom:1px;" alt="" /></noscript>
+<script>
+if ( 'object' === typeof wpcom_mobile_user_agent_info ) {
+
+	wpcom_mobile_user_agent_info.init();
+	var mobileStatsQueryString = "";
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedPlatformName )
+		mobileStatsQueryString += "&x_" + 'mobile_platforms' + '=' + wpcom_mobile_user_agent_info.matchedPlatformName;
+	
+	if( false !== wpcom_mobile_user_agent_info.matchedUserAgentName )
+		mobileStatsQueryString += "&x_" + 'mobile_devices' + '=' + wpcom_mobile_user_agent_info.matchedUserAgentName;
+	
+	if( wpcom_mobile_user_agent_info.isIPad() )
+		mobileStatsQueryString += "&x_" + 'ipad_views' + '=' + 'views';
+
+	if( "" != mobileStatsQueryString ) {
+		new Image().src = document.location.protocol + '//pixel.wp.com/g.gif?v=wpcom-no-pv' + mobileStatsQueryString + '&baba=' + Math.random();
+	}
+	
+}
+</script>
+</body>
+</html>
